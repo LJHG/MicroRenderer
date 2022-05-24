@@ -5,6 +5,8 @@
 #include "Renderer.h"
 #include "ShadingPipeline.h"
 #include "stb_image.h"
+#include "Structure.h"
+
 using namespace  std;
 
 const int WIDTH = 640, HEIGHT = 480; // SDL窗口的宽和高
@@ -20,17 +22,18 @@ int main() {
     v5.position = glm::vec3(0,-1,1); v5.color=glm::vec4 (0,0,128,0);
     v6.position = glm::vec3(1,-1,1); v6.color=glm::vec4 (0,0,128,0);
 
-    MicroRenderer::Mesh mesh;
-    mesh.setVertices(std::vector<MicroRenderer::VertexData>{v1,v2,v3,v4,v5,v6});
-    mesh.setIndices(std::vector<unsigned int>{0,1,2,3,4,5});
+    MicroRenderer::Mesh mesh1,mesh2;
+    mesh1.asTriangle(v1,v2,v3);
+    mesh2.asTriangle(v4,v5,v6);
     while(!app.shouldWindowClose()){
         //处理事件
         app.processEvent();
-        std::vector<MicroRenderer::VertexData> vertices = mesh.getVertices();
-        //vertex shader
-        MicroRenderer::ShadingPipeline pipeline(WIDTH,HEIGHT,mesh.getVertices(),mesh.getIndices());
-        pipeline.shade(SIMPLE_SHADER,FILL);
-        uint8_t* pixels = pipeline.getResult();
+        MicroRenderer::Renderer renderer(WIDTH,HEIGHT);
+        renderer.setShader(SIMPLE_SHADER);
+        renderer.initShadingPipeline();
+        renderer.setMeshes(std::vector<MicroRenderer::Mesh>{mesh1,mesh2});
+        renderer.render();
+        uint8_t* pixels = renderer.getPixelBuffer();
         app.updateCanvas(pixels,WIDTH,HEIGHT, 3);
 
 //        MicroRenderer::Image image = MicroRenderer::CommonUtils::loadImage("../assets/1.png");

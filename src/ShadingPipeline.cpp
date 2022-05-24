@@ -5,11 +5,10 @@
 #include "ShadingPipeline.h"
 
 namespace MicroRenderer{
-   ShadingPipeline::ShadingPipeline(int _width, int _height, std::vector<VertexData> _vertices, std::vector<unsigned int> _indices) {
+   ShadingPipeline::ShadingPipeline(int _width, int _height, Shader* _shader) {
        width = _width;
        height = _height;
-       vertices = _vertices;
-       indices = _indices;
+       shader = _shader;
        image = (uint8_t*) malloc(sizeof(uint8_t)*width*height*3);
        imageSwap = (uint8_t*) malloc(sizeof(uint8_t)*width*height*3);
        zBuffer = (float*)malloc(sizeof(float)*width*height);
@@ -22,21 +21,20 @@ namespace MicroRenderer{
                zBuffer[i*width + j] = 2;
            }
        }
-
        viewPortMatrix = MathUtils::calViewPortMatrix(0,0,width,height);
    }
 
-    void ShadingPipeline::shade(int shadingMode, int rasterizingMode) {
+    void ShadingPipeline::shade(const std::vector<VertexData>& _vertices,
+                                const std::vector<unsigned int>& _indices,
+                                int rasterizingMode) {
         //according to indices, every 3 indices organize as a triangle, len(indices) could be greater than len(_vertices)
-        if(shadingMode == SIMPLE_SHADER){
-            shader = new SimpleShader();
-        }
+
         VertexData v1,v2,v3;
         VertexOutData v1o,v2o,v3o;
-        for(int i=0;i<indices.size()/3;i++){
-            v1 = vertices[indices[i*3+0]];
-            v2 = vertices[indices[i*3+1]];
-            v3 = vertices[indices[i*3+2]];
+        for(int i=0;i<_indices.size()/3;i++){
+            v1 = _vertices[_indices[i*3+0]];
+            v2 = _vertices[_indices[i*3+1]];
+            v3 = _vertices[_indices[i*3+2]];
             //vertex shader
             v1o = shader->vertexShader(v1);
             v2o = shader->vertexShader(v2);

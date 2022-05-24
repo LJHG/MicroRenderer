@@ -21,8 +21,10 @@ namespace MicroRenderer{
 
     class ShadingPipeline {
     public:
-        ShadingPipeline(int _width,int _height,std::vector<VertexData> _vertices, std::vector<unsigned int> _indices);
-        void shade(int shadingMode,int rasterizingMode);
+        ShadingPipeline(int _width,int _height,Shader* _shader);
+        void shade(const std::vector<VertexData>& _vertices,
+                   const std::vector<unsigned int>& _indices,
+                   int rasterizingMode);
         uint8_t* getResult();
     private:
         int width;
@@ -32,8 +34,6 @@ namespace MicroRenderer{
         uint8_t* imageSwap; // double buffer
         float* zBuffer;
         glm::mat4 viewPortMatrix;
-        std::vector<VertexData> vertices;
-        std::vector<unsigned int> indices;
         void bresenhamLineRasterization(VertexOutData& from, VertexOutData& to);
         void fillRasterization(VertexOutData& v1, VertexOutData& v2, VertexOutData& v3);
         void swapBuffer();
