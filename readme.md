@@ -2,7 +2,9 @@
 
 A self-built soft Rasterizer, called Micro(soft)Renderer.
 
-- [x] Triangle Rasterization 
+- [x] Triangle Rasterization(line mode and fill mode)
+- [x] linear and barycentric interpolation
+- [x] Z-buffering
 
 ## dependencies
 1. SDL2
