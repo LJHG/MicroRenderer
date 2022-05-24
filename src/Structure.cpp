@@ -6,7 +6,7 @@
 
 namespace MicroRenderer{
     void Mesh::asTriangle(VertexData v1, VertexData v2, VertexData v3) {
-        vertices.empty();indices.empty();
+        vertices.clear();indices.clear();
         vertices.push_back(v1);
         vertices.push_back(v2);
         vertices.push_back(v3);
@@ -21,5 +21,13 @@ namespace MicroRenderer{
 
     std::vector<unsigned int> &Mesh::getIndices() {
         return indices;
+    }
+
+    void Mesh::setVertices(const std::vector<VertexData>& _vertices) {
+        vertices = _vertices;
+    }
+
+    void Mesh::setIndices(const std::vector<unsigned int>& _indices) {
+        indices = _indices;
     }
 }

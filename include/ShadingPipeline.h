@@ -30,6 +30,7 @@ namespace MicroRenderer{
         Shader* shader;
         uint8_t* image;
         uint8_t* imageSwap; // double buffer
+        float* zBuffer;
         glm::mat4 viewPortMatrix;
         std::vector<VertexData> vertices;
         std::vector<unsigned int> indices;

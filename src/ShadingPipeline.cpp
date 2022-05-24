@@ -12,9 +12,17 @@ namespace MicroRenderer{
        indices = _indices;
        image = (uint8_t*) malloc(sizeof(uint8_t)*width*height*3);
        imageSwap = (uint8_t*) malloc(sizeof(uint8_t)*width*height*3);
+       zBuffer = (float*)malloc(sizeof(float)*width*height);
        //initialize buffer (avoid sparkle in the beginning)
        memset(image,0,sizeof(uint8_t)*width*height*3);
        memset(imageSwap,0,sizeof(uint8_t)*width*height*3);
+       // DO NOT use memset to initialize except when setting value to 0 or -1 (巨坑。。。
+       for(int i=0;i<height;i++){
+           for(int j=0;j<width;j++){
+               zBuffer[i*width + j] = 2;
+           }
+       }
+
        viewPortMatrix = MathUtils::calViewPortMatrix(0,0,width,height);
    }
 
@@ -116,13 +124,18 @@ namespace MicroRenderer{
            for(int y=bottom;y<=top;y++){
                if(MathUtils::insideTriangle(static_cast<float>(x),static_cast<float>(y),x1,y1,x2,y2,x3,y3)){
                    VertexOutData tmp = MathUtils::barycentricLerp(x,y,v1,v2,v3);
-                   //fragment shader
-                   glm::vec4 color = shader->fragmentShader(tmp);
-                   int index = (y*width+x)*3;
-                   imageSwap[index +0] = static_cast<int>(color[0]);
-                   imageSwap[index +1] = static_cast<int>(color[1]);
-                   imageSwap[index +2] = static_cast<int>(color[2]);
+                   int index = y*width+x;
+                   if(tmp.position[2] < zBuffer[index]){
+                       zBuffer[index] = tmp.position[2];
+                       //fragment shader
+                       glm::vec4 color = shader->fragmentShader(tmp);
+                       int colorIndex =  index*3; //multiply channel
+                       imageSwap[colorIndex +0] = static_cast<int>(color[0]);
+                       imageSwap[colorIndex +1] = static_cast<int>(color[1]);
+                       imageSwap[colorIndex +2] = static_cast<int>(color[2]);
+                   }
                }
+
            }
        }
     }

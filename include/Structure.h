@@ -31,6 +31,8 @@ namespace MicroRenderer{
         void asTriangle(VertexData v1, VertexData v2, VertexData v3); // read 3 vertices and as a triangle
         std::vector<VertexData>& getVertices();
         std::vector<unsigned int>& getIndices();
+        void setVertices(const std::vector<VertexData>& _vertices);
+        void setIndices(const std::vector<unsigned int>& _indices);
     private:
         std::vector<VertexData> vertices;
         std::vector<unsigned int> indices;
