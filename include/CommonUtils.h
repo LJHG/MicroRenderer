@@ -9,8 +9,6 @@
 #include <string>
 
 
-
-
 namespace MicroRenderer{
 
     struct Image{

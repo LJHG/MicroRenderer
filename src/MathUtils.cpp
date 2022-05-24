@@ -73,4 +73,71 @@ namespace MicroRenderer{
         return perspectiveProjectionMatrix;
     }
 
+    glm::mat4 MathUtils::calViewPortMatrix(int left, int top, int width, int height) {
+        // the matrix in glm in stored by column... , so matrix[x][y] access the element of x col ,y row
+        glm::mat4 viewPortMatrix(1.0f);
+        viewPortMatrix[0][0] = static_cast<float>(width)/2.0f;
+        viewPortMatrix[3][0] = static_cast<float>(left) + static_cast<float>(width)/2.0f;
+        viewPortMatrix[1][1] = static_cast<float>(height)/2.0f;
+        viewPortMatrix[3][1] = static_cast<float>(top) + static_cast<float>(height)/2.0f;
+        return viewPortMatrix;
+    }
+
+    VertexOutData MathUtils::lerp(VertexOutData from, VertexOutData to, float t) {
+        // from -> t = 0  to -> t = 1
+        // currently, interpolate for position, color and normal
+        VertexOutData vResult;
+        vResult.position = from.position  + (to.position - from.position) * t;
+        vResult.normal = from.normal + (to.normal - from.normal) * t;
+        vResult.color = from.color + (to.color - from.color) * t;
+
+        return vResult;
+    }
+
+    VertexOutData MathUtils::barycentricLerp(int x, int y, VertexOutData v1, VertexOutData v2, VertexOutData v3) {
+        auto[alpha, beta, gamma] = computeBarycentric2D(static_cast<float>(x), static_cast<float>(y),
+                                                        v1.position[0],v1.position[1],
+                                                        v2.position[0],v2.position[1],
+                                                        v3.position[0],v3.position[1]);
+        VertexOutData vResult;
+        vResult.position = v1.position * alpha  + v2.position * beta +  v3.position*gamma;
+        vResult.normal = v1.normal * alpha  + v2.normal * beta + v3.normal*gamma;
+        vResult.color = v1.color * alpha  + v2.color * beta +  v3.color*gamma;
+
+        return vResult;
+    }
+
+    bool MathUtils::insideTriangle(float x, float y, float x1, float y1, float x2, float y2, float x3, float y3) {
+        // 其实传进来的应该是，不过这里直接写成float了，在函数外直接强转
+        // check if the point p(x, y) is inside the triangle
+        x = x + 0.5f;
+        y = y + 0.5f;
+
+        float a1 = x1-x; float a2 = y1-y;
+        float b1 = x2-x; float b2 = y2-y;
+        float c1 = x3-x; float c2 = y3-y;
+
+        float papb = crossProduct(a1,a2,b1,b2);
+        float pbpc = crossProduct(b1,b2,c1,c2);
+        float pcpa = crossProduct(c1,c2,a1,a2);
+
+        if( (papb > 0 && pbpc > 0 && pcpa >0)  || (papb < 0 && pbpc < 0 && pcpa < 0) )
+            return true;
+        return false;
+    }
+
+    float MathUtils::crossProduct(float a1, float a2, float b1, float b2) {
+        // return product of vector (a1,a2) and (b1,b2)
+        return a1*b2 - a2*b1;
+    }
+
+    std::tuple<float, float, float>
+    MathUtils::computeBarycentric2D(float x, float y, float x1, float y1, float x2, float y2, float x3, float y3) {
+        float c1 = (x*(y2 - y3) + (x3 - x2)*y + x2*y3 - x3*y2) / (x1*(y2 - y3) + (x3 - x2)*y1 + x2*y3 - x3*y2);
+        float c2 = (x*(y3 - y1) + (x1 - x3)*y + x3*y1 - x1*y3) / (x2*(y3 - y1) + (x1 - x3)*y2 + x3*y1 - x1*y3);
+        float c3 = (x*(y1 - y2) + (x2 - x1)*y + x1*y2 - x2*y1) / (x3*(y1 - y2) + (x2 - x1)*y3 + x1*y2 - x2*y1);
+        return {c1,c2,c3};
+    }
+
+
 }
