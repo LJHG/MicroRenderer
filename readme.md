@@ -13,6 +13,6 @@ A self-built soft Rasterizer, called Micro(soft)Renderer.
 
 ## current stage
 <img alt="line rasterization" height="480" src="./images/triangle_line_rasterize.jpg" width="640"/>
-<img alt="line rasterization" height="480" src="./images/triangle_fill_rasterize.jpg" width="640"/>
+<img alt="line rasterization" height="480" src="./images/triangle_fill_zbuffer.png" width="640"/>
 
 
