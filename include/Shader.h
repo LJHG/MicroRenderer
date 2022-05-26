@@ -6,6 +6,8 @@
 #define MICRORENDERER_SHADER_H
 
 #include "Structure.h"
+#include <iostream>
+#include "LogUtils.h"
 
 namespace MicroRenderer{
     class Shader {

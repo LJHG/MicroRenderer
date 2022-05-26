@@ -25,12 +25,28 @@ int main() {
     MicroRenderer::Mesh mesh1,mesh2;
     mesh1.asTriangle(v1,v2,v3);
     mesh2.asTriangle(v4,v5,v6);
+    glm::vec3 cameraPos(0,0,-2);
+    glm::vec3 target(0,0,1);
+    glm::vec3 worldUp(0,1,0);
+    float fov = 60.0f;
+    float aspectRatio = static_cast<float>(WIDTH)/static_cast<float>(HEIGHT);
+    float zNear = 0.1f;
+    float zFar = 100.0f;
+
+
+
     while(!app.shouldWindowClose()){
         //处理事件
         app.processEvent();
+        //renderer initialize
         MicroRenderer::Renderer renderer(WIDTH,HEIGHT);
-        renderer.setShader(SIMPLE_SHADER);
+        renderer.setModelMatrix(glm::mat4(1.0f));
+        renderer.setViewMatrix(MicroRenderer::MathUtils::calViewMatrix(cameraPos,target,worldUp));
+        renderer.setProjectionMatrix(MicroRenderer::MathUtils::calPerspectiveProjectionMatrix(fov,aspectRatio,zNear,zFar));
+        //renderer.setProjectionMatrix(MicroRenderer::MathUtils::calOrthoProjectionMatrix(fov,aspectRatio,zNear,zFar));
+        renderer.setShader(THREE_D_SHADER);
         renderer.initShadingPipeline();
+        //render
         renderer.setMeshes(std::vector<MicroRenderer::Mesh>{mesh1,mesh2});
         renderer.render();
         uint8_t* pixels = renderer.getPixelBuffer();

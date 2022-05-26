@@ -40,10 +40,16 @@ namespace MicroRenderer{
             v2o = shader->vertexShader(v2);
             v3o = shader->vertexShader(v3);
 
+            // division (好像很有必要写...)
+            v1o.position = v1o.position / v1o.position[3];
+            v2o.position = v2o.position / v2o.position[3];
+            v3o.position = v3o.position / v3o.position[3];
+
             //view port transformation
             v1o.position = viewPortMatrix * v1o.position;
             v2o.position = viewPortMatrix * v2o.position;
             v3o.position = viewPortMatrix * v3o.position;
+
 
             //rasterization
             // the triangle will appear upside down because it goes like ➡️ x ⬇️ y, but never mind...
