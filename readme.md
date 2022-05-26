@@ -8,9 +8,6 @@ A self-built soft Rasterizer, called Micro(soft)Renderer.
 - [x] Z-buffering
 - [x] mvp transformation
 
-## bugs
-- [ ] crash when set fov to a small value(eg. 6.0f)
-- [ ] crash when using OrthoProjectionMatrix
 
 ## dependencies
 1. SDL2
