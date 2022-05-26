@@ -15,7 +15,6 @@ A self-built soft Rasterizer, called Micro(soft)Renderer.
 3. glm
 
 ## current stage showcase
-<img alt="line rasterization" height="480" src="./images/triangle_line_rasterize.jpg" width="640"/>
-<img alt="line rasterization" height="480" src="./images/triangle_fill_zbuffer.png" width="640"/>
+<img alt="line rasterization" height="480" src="./images/rotate_triangle.gif" width="640"/>
 
 

@@ -50,7 +50,6 @@ int main() {
         renderer.setModelMatrix(model);
         renderer.setViewMatrix(MicroRenderer::MathUtils::calViewMatrix(cameraPos,target,worldUp));
         renderer.setProjectionMatrix(MicroRenderer::MathUtils::calPerspectiveProjectionMatrix(fov,aspectRatio,zNear,zFar));
-        //renderer.setProjectionMatrix(MicroRenderer::MathUtils::calOrthoProjectionMatrix(fov,aspectRatio,zNear,zFar));
         renderer.setShader(THREE_D_SHADER);
         renderer.initShadingPipeline();
         //render
