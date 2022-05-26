@@ -28,14 +28,25 @@ namespace MicroRenderer{
     };
     class Mesh{
     public:
-        void asTriangle(VertexData v1, VertexData v2, VertexData v3); // read 3 vertices and as a triangle
+        Mesh();
+
+        /** getter and setter for vertices and indices **/
         std::vector<VertexData>& getVertices();
         std::vector<unsigned int>& getIndices();
         void setVertices(const std::vector<VertexData>& _vertices);
         void setIndices(const std::vector<unsigned int>& _indices);
+
+        /** set model matrix **/
+        void setModelMatrix(const glm::mat4& m);
+        glm::mat4 getModelMatrix();
+
+
+        /** quick create mesh functions **/
+        void asTriangle(VertexData v1, VertexData v2, VertexData v3); // read 3 vertices and as a triangle
     private:
         std::vector<VertexData> vertices;
         std::vector<unsigned int> indices;
+        glm::mat4 modelMatrix;
     };
 }
 

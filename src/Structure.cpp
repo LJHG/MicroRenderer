@@ -30,4 +30,16 @@ namespace MicroRenderer{
     void Mesh::setIndices(const std::vector<unsigned int>& _indices) {
         indices = _indices;
     }
+
+    Mesh::Mesh() {
+        modelMatrix = glm::mat4(1.0f);
+    }
+
+    void Mesh::setModelMatrix(const glm::mat4 &m) {
+        modelMatrix = m;
+    }
+
+    glm::mat4 Mesh::getModelMatrix() {
+        return modelMatrix;
+    }
 }
