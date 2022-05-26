@@ -20,9 +20,9 @@ namespace MicroRenderer{
         void setProjectionMatrix(glm::mat4 matrix);
 
     protected:
-        glm::mat4 modelMatrix{};
-        glm::mat4 viewMatrix{};
-        glm::mat4 projectionMatrix{};
+        glm::mat4 modelMatrix;
+        glm::mat4 viewMatrix;
+        glm::mat4 projectionMatrix;
     };
 
     // simple shader, just pass data, didn't do anything

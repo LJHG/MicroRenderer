@@ -4,31 +4,33 @@
 #include "Renderer.h"
 
 namespace MicroRenderer{
-    void Renderer::setModelMatrix(const glm::mat4 &m) {
-        modelMatrix = m;
-    }
-
     void Renderer::setViewMatrix(const glm::mat4 &v) {
+        if(shadingPipeline->shader == nullptr){
+            std::cout<<"未定义shader"<<std::endl;
+            return;
+        }
         viewMatrix = v;
+        shadingPipeline->shader->setViewMatrix(v);
     }
 
     void Renderer::setProjectionMatrix(const glm::mat4 &p) {
+        if(shadingPipeline->shader == nullptr){
+            std::cout<<"未定义shader"<<std::endl;
+            return;
+        }
         projectionMatrix = p;
+        shadingPipeline->shader->setProjectionMatrix(p);
     }
 
-    void Renderer::setShader(int shadingMode) {
+    void Renderer::initShadingPipeline(int shadingMode) {
+        Shader* shader = nullptr;
         if(shadingMode == SIMPLE_SHADER){
             shader = new SimpleShader();
         }
         else if(shadingMode == THREE_D_SHADER){
             shader = new ThreeDShader(modelMatrix,viewMatrix,projectionMatrix);
-        }
-    }
-
-    void Renderer::initShadingPipeline() {
-        if(shader == nullptr){
-            std::cout<<"should set a shader first"<<std::endl;
-            return;
+        }else{
+            //do nothing
         }
         shadingPipeline = new ShadingPipeline(width,height,shader);
     }
@@ -36,14 +38,19 @@ namespace MicroRenderer{
     Renderer::Renderer(int _width, int _height) {
         width = _width;
         height = _height;
+        modelMatrix = glm::mat4(1.0f);
+        viewMatrix = glm::mat4(1.0f);
+        projectionMatrix = glm::mat4(1.0f);
     }
 
     void Renderer::render() {
         if(meshes.empty()){
             std::cout<<"nothing to draw"<<std::endl;
         }
+        shadingPipeline->clearBuffer();
         for(Mesh m : meshes){
             // draw mesh one by one
+            shadingPipeline->shader->setModelMatrix(m.getModelMatrix());
             shadingPipeline->shade(m.getVertices(),m.getIndices(),FILL);
         }
     }
@@ -56,5 +63,6 @@ namespace MicroRenderer{
         pixelBuffer = shadingPipeline->getResult();
         return pixelBuffer;
     }
+
 }
 

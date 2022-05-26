@@ -18,11 +18,9 @@ namespace MicroRenderer{
     public:
         //initialize stage functions -> 其实可以全部写到构造函数里,emmm
         Renderer(int _width, int _height);
-        void setShader(int shadingMode);
-        void setModelMatrix(const glm::mat4& m);
         void setViewMatrix(const glm::mat4& v);
         void setProjectionMatrix(const glm::mat4& p);
-        void initShadingPipeline();
+        void initShadingPipeline(int shadingMode);
         //render
         void setMeshes(const std::vector<Mesh>& _meshes);
         void render();
@@ -32,7 +30,6 @@ namespace MicroRenderer{
         int height;
         std::vector<Mesh> meshes;
         ShadingPipeline* shadingPipeline;
-        Shader* shader = nullptr;
         uint8_t* pixelBuffer;
         glm::mat4 modelMatrix;
         glm::mat4 viewMatrix;

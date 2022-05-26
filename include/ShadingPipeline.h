@@ -27,10 +27,10 @@ namespace MicroRenderer{
                    int rasterizingMode);
         void clearBuffer();
         uint8_t* getResult();
+        Shader* shader; // 直接把shader弄成public,不然又要给shading pipeline写一堆setMatrix...
     private:
         int width;
         int height;
-        Shader* shader;
         uint8_t* image;
         float* zBuffer;
         glm::mat4 viewPortMatrix;
