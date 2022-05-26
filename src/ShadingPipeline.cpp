@@ -10,17 +10,9 @@ namespace MicroRenderer{
        height = _height;
        shader = _shader;
        image = (uint8_t*) malloc(sizeof(uint8_t)*width*height*3);
-       imageSwap = (uint8_t*) malloc(sizeof(uint8_t)*width*height*3);
        zBuffer = (float*)malloc(sizeof(float)*width*height);
        //initialize buffer (avoid sparkle in the beginning)
-       memset(image,0,sizeof(uint8_t)*width*height*3);
-       memset(imageSwap,0,sizeof(uint8_t)*width*height*3);
-       // DO NOT use memset to initialize except when setting value to 0 or -1 (巨坑。。。
-       for(int i=0;i<height;i++){
-           for(int j=0;j<width;j++){
-               zBuffer[i*width + j] = 2;
-           }
-       }
+       clearBuffer();
        viewPortMatrix = MathUtils::calViewPortMatrix(0,0,width,height);
    }
 
@@ -50,7 +42,6 @@ namespace MicroRenderer{
             v2o.position = viewPortMatrix * v2o.position;
             v3o.position = viewPortMatrix * v3o.position;
 
-
             //rasterization
             // the triangle will appear upside down because it goes like ➡️ x ⬇️ y, but never mind...
             if(rasterizingMode == LINE){
@@ -62,9 +53,6 @@ namespace MicroRenderer{
                 // bounding box inside triangle fill algorithm -> games101 assignment2 and assignment3
                 fillRasterization(v1o,v2o,v3o);
             }
-
-            // double buffer
-            swapBuffer();
         }
    }
 
@@ -90,9 +78,9 @@ namespace MicroRenderer{
             //fragment shader
             glm::vec4 color = shader->fragmentShader(tmp);
             int index = (y0*width+x0)*3;
-            imageSwap[index +0] = static_cast<int>(color[0]);
-            imageSwap[index +1] = static_cast<int>(color[1]);
-            imageSwap[index +2] = static_cast<int>(color[2]);
+            image[index +0] = static_cast<int>(color[0]);
+            image[index +1] = static_cast<int>(color[1]);
+            image[index +2] = static_cast<int>(color[2]);
 
             if(x0 == x1 && y0 == y1){
                 break;
@@ -135,9 +123,9 @@ namespace MicroRenderer{
                        //fragment shader
                        glm::vec4 color = shader->fragmentShader(tmp);
                        int colorIndex =  index*3; //multiply channel
-                       imageSwap[colorIndex +0] = static_cast<int>(color[0]);
-                       imageSwap[colorIndex +1] = static_cast<int>(color[1]);
-                       imageSwap[colorIndex +2] = static_cast<int>(color[2]);
+                       image[colorIndex +0] = static_cast<int>(color[0]);
+                       image[colorIndex +1] = static_cast<int>(color[1]);
+                       image[colorIndex +2] = static_cast<int>(color[2]);
                    }
                }
 
@@ -149,10 +137,15 @@ namespace MicroRenderer{
        return image;
    }
 
-    void ShadingPipeline::swapBuffer() {
-       // imageSwap -> image
-       // don't know the use of double buffer for now... and maybe I write it wrong...
-        uint8_t* tmp;
-        image = imageSwap;
+    void ShadingPipeline::clearBuffer() {
+        // clear buffer everytime when call shading pipeline
+        memset(image,0,sizeof(uint8_t)*width*height*3);
+        // DO NOT use memset to initialize except when setting value to 0 or -1 (巨坑。。。
+        for(int i=0;i<height;i++){
+            for(int j=0;j<width;j++){
+                zBuffer[i*width + j] = 2;
+            }
+        }
     }
+
 }

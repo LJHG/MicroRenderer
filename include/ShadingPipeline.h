@@ -25,18 +25,17 @@ namespace MicroRenderer{
         void shade(const std::vector<VertexData>& _vertices,
                    const std::vector<unsigned int>& _indices,
                    int rasterizingMode);
+        void clearBuffer();
         uint8_t* getResult();
     private:
         int width;
         int height;
         Shader* shader;
         uint8_t* image;
-        uint8_t* imageSwap; // double buffer
         float* zBuffer;
         glm::mat4 viewPortMatrix;
         void bresenhamLineRasterization(VertexOutData& from, VertexOutData& to);
         void fillRasterization(VertexOutData& v1, VertexOutData& v2, VertexOutData& v3);
-        void swapBuffer();
     };
 }
 
