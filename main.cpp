@@ -6,6 +6,8 @@
 #include "ShadingPipeline.h"
 #include "stb_image.h"
 #include "Structure.h"
+#include <chrono>
+#include <ctime>
 
 using namespace  std;
 
@@ -20,7 +22,7 @@ int main() {
     //triangle 2
     v4.position = glm::vec3(-1,1,1); v4.color=glm::vec4 (0,0,128,0);
     v5.position = glm::vec3(0,-1,1); v5.color=glm::vec4 (0,0,128,0);
-    v6.position = glm::vec3(1,-1,1); v6.color=glm::vec4 (0,0,128,0);
+    v6.position = glm::vec3(1,-1,1); v6.color=glm::vec4 (0,200,128,0);
 
     MicroRenderer::Mesh mesh1,mesh2;
     mesh1.asTriangle(v1,v2,v3);
@@ -28,19 +30,24 @@ int main() {
     glm::vec3 cameraPos(0,0,-2);
     glm::vec3 target(0,0,1);
     glm::vec3 worldUp(0,1,0);
-    float fov = 60.0f;
+    float fov = 600.0f;
     float aspectRatio = static_cast<float>(WIDTH)/static_cast<float>(HEIGHT);
     float zNear = 0.1f;
     float zFar = 100.0f;
 
 
-
+    auto start = chrono::system_clock::now();
     while(!app.shouldWindowClose()){
         //处理事件
+        auto end = chrono::system_clock::now();
+        std::chrono::duration<double> elapsed_seconds = end-start;
+        std::cout<<elapsed_seconds.count()<<std::endl;
         app.processEvent();
         //renderer initialize
         MicroRenderer::Renderer renderer(WIDTH,HEIGHT);
-        renderer.setModelMatrix(glm::mat4(1.0f));
+        glm::mat4 model(1.0f);
+        model = MicroRenderer::MathUtils::rotationByX(model,sin(elapsed_seconds.count())*180);
+        renderer.setModelMatrix(model);
         renderer.setViewMatrix(MicroRenderer::MathUtils::calViewMatrix(cameraPos,target,worldUp));
         renderer.setProjectionMatrix(MicroRenderer::MathUtils::calPerspectiveProjectionMatrix(fov,aspectRatio,zNear,zFar));
         //renderer.setProjectionMatrix(MicroRenderer::MathUtils::calOrthoProjectionMatrix(fov,aspectRatio,zNear,zFar));
