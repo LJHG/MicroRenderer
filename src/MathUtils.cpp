@@ -47,7 +47,7 @@ namespace MicroRenderer{
     /**** self implement view matrix and projection matrix ****/
     glm::mat4 MathUtils::calViewMatrix(glm::vec3 cameraPos, glm::vec3 target, glm::vec3 worldUp){
         //self implementing -> according to games101 p3
-        std::cout<<"using self implement view matrix"<<std::endl;
+        //std::cout<<"using self implement view matrix"<<std::endl;
         glm::mat4 vMat;
 
         glm::mat4 rotation(1.0f);
@@ -73,7 +73,7 @@ namespace MicroRenderer{
 
         glm::mat4 MathUtils::calPerspectiveProjectionMatrix(float fov, float aspectRatio, float zNear, float zFar){
         //copy from games101
-        std::cout<<"using self implement projection matrix"<<std::endl;
+        //std::cout<<"using self implement projection matrix"<<std::endl;
         float n = zNear;
         float f = zFar;
         float t = -tan( (fov/360)*PI ) * abs(n);
@@ -189,6 +189,15 @@ namespace MicroRenderer{
         float c2 = (x*(y3 - y1) + (x1 - x3)*y + x3*y1 - x1*y3) / (x2*(y3 - y1) + (x1 - x3)*y2 + x3*y1 - x1*y3);
         float c3 = (x*(y1 - y2) + (x2 - x1)*y + x1*y2 - x2*y1) / (x3*(y1 - y2) + (x2 - x1)*y3 + x1*y2 - x2*y1);
         return {c1,c2,c3};
+    }
+
+    glm::mat4 MathUtils::rotationByX(const glm::mat4 matrix, const double angle) {
+        glm::mat4 resultMatrix(1.0f);
+        glm::mat4 rotationMatrix(1.0f);
+        float degree = (angle*PI)/180.0f;
+        rotationMatrix[1][1] = cos(degree); rotationMatrix[1][2] = sin(degree);
+        rotationMatrix[2][1] = -sin(degree);rotationMatrix[2][2] = cos(degree);
+        return rotationMatrix * matrix;
     }
 
 
