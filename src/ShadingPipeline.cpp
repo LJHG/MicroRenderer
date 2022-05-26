@@ -126,6 +126,7 @@ namespace MicroRenderer{
 
        for(int x = left;x<=right;x++){
            for(int y=bottom;y<=top;y++){
+               if(x<0 || x>=width || y<0 || y>=height) continue; // out of screen space, do not render
                if(MathUtils::insideTriangle(static_cast<float>(x),static_cast<float>(y),x1,y1,x2,y2,x3,y3)){
                    VertexOutData tmp = MathUtils::barycentricLerp(x,y,v1,v2,v3);
                    int index = y*width+x;
