@@ -7,7 +7,6 @@
 #include "stb_image.h"
 #include "Structure.h"
 #include <chrono>
-#include <ctime>
 
 using namespace  std;
 
@@ -35,6 +34,10 @@ int main() {
     float zNear = 0.1f;
     float zFar = 100.0f;
 
+    MicroRenderer::Renderer renderer(WIDTH,HEIGHT);
+    renderer.initShadingPipeline(THREE_D_SHADER);
+    renderer.setViewMatrix(MicroRenderer::MathUtils::calViewMatrix(cameraPos,target,worldUp));
+    renderer.setProjectionMatrix(MicroRenderer::MathUtils::calPerspectiveProjectionMatrix(fov,aspectRatio,zNear,zFar));
 
     auto start = chrono::system_clock::now();
     while(!app.shouldWindowClose()){
@@ -44,15 +47,12 @@ int main() {
         std::cout<<elapsed_seconds.count()<<std::endl;
         app.processEvent();
         //renderer initialize
-        MicroRenderer::Renderer renderer(WIDTH,HEIGHT);
+
         glm::mat4 model(1.0f);
         model = MicroRenderer::MathUtils::rotationByX(model,sin(elapsed_seconds.count())*180);
-        renderer.setModelMatrix(model);
-        renderer.setViewMatrix(MicroRenderer::MathUtils::calViewMatrix(cameraPos,target,worldUp));
-        renderer.setProjectionMatrix(MicroRenderer::MathUtils::calPerspectiveProjectionMatrix(fov,aspectRatio,zNear,zFar));
-        renderer.setShader(THREE_D_SHADER);
-        renderer.initShadingPipeline();
+
         //render
+        mesh1.setModelMatrix(model);
         renderer.setMeshes(std::vector<MicroRenderer::Mesh>{mesh1,mesh2});
         renderer.render();
         uint8_t* pixels = renderer.getPixelBuffer();
