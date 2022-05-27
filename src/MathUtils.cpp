@@ -27,22 +27,22 @@ namespace MicroRenderer{
 //        return vMat;
 //    }
 
-//    glm::mat4 MathUtils::calPerspectiveProjectionMatrix(float fov, float aspectRatio, float zNear, float zFar)
-//    {
-//        //copy from https://github.com/ZeusYang/TinySoftRenderer/blob/master/src/TRMathUtils.cpp
-//        //Setup perspective matrix (camera space -> homogeneous space)
-//        std::cout<<"using copy projection matrix"<<std::endl;
-//        glm::mat4 pMat = glm::mat4(1.0f);
-//
-//        float rFovy = fov * 3.14159265358979323846 / 180;
-//        const float tanHalfFovy = std::tan(rFovy * 0.5f);
-//        float f_n = zFar - zNear;
-//        pMat[0][0] = 1.0f / (aspectRatio*tanHalfFovy); pMat[0][1] = 0.0f;				pMat[0][2] = 0.0f;					pMat[0][3] = 0.0f;
-//        pMat[1][0] = 0.0f;						  pMat[1][1] = 1.0f / tanHalfFovy;  pMat[1][2] = 0.0f;					pMat[1][3] = 0.0f;
-//        pMat[2][0] = 0.0f;						  pMat[2][1] = 0.0f;			    pMat[2][2] = -(zFar + zNear) / f_n;	pMat[2][3] = -1.0f;
-//        pMat[3][0] = 0.0f;						  pMat[3][1] = 0.0f;				pMat[3][2] = -2.0f*zNear*zFar / f_n;	pMat[3][3] = 0.0f;
-//        return pMat;
-//    }
+    glm::mat4 MathUtils::calPerspectiveProjectionMatrix(float fov, float aspectRatio, float zNear, float zFar)
+    {
+        //copy from https://github.com/ZeusYang/TinySoftRenderer/blob/master/src/TRMathUtils.cpp
+        //Setup perspective matrix (camera space -> homogeneous space)
+        std::cout<<"using copy projection matrix"<<std::endl;
+        glm::mat4 pMat = glm::mat4(1.0f);
+
+        float rFovy = fov * 3.14159265358979323846 / 180;
+        const float tanHalfFovy = std::tan(rFovy * 0.5f);
+        float f_n = zFar - zNear;
+        pMat[0][0] = 1.0f / (aspectRatio*tanHalfFovy); pMat[0][1] = 0.0f;				pMat[0][2] = 0.0f;					pMat[0][3] = 0.0f;
+        pMat[1][0] = 0.0f;						  pMat[1][1] = 1.0f / tanHalfFovy;  pMat[1][2] = 0.0f;					pMat[1][3] = 0.0f;
+        pMat[2][0] = 0.0f;						  pMat[2][1] = 0.0f;			    pMat[2][2] = -(zFar + zNear) / f_n;	pMat[2][3] = -1.0f;
+        pMat[3][0] = 0.0f;						  pMat[3][1] = 0.0f;				pMat[3][2] = -2.0f*zNear*zFar / f_n;	pMat[3][3] = 0.0f;
+        return pMat;
+    }
 
     /**** self implement view matrix and projection matrix ****/
     glm::mat4 MathUtils::calViewMatrix(glm::vec3 cameraPos, glm::vec3 target, glm::vec3 worldUp){
@@ -52,6 +52,8 @@ namespace MicroRenderer{
 
         glm::mat4 rotation(1.0f);
         glm::mat4 translation(1.0f);
+
+        target = glm::normalize(target-cameraPos); //the input target is a position, we need to transform it to a vector
 
         glm::vec3 g_cross_t = glm::cross(target,worldUp);
 
@@ -71,31 +73,30 @@ namespace MicroRenderer{
         return vMat;
     }
 
-        glm::mat4 MathUtils::calPerspectiveProjectionMatrix(float fov, float aspectRatio, float zNear, float zFar){
-        //copy from games101
-        //std::cout<<"using self implement projection matrix"<<std::endl;
-        float n = zNear;
-        float f = zFar;
-        float t = -tan( (fov/360)*PI ) * abs(n);
-        float b = t * (-1);
-        float r = aspectRatio * t;
-        float l = r * (-1);
 
-        //  matrix for orthographic
-        glm::mat4 orthoProjectionMatrix = calOrthoProjectionMatrix(fov,aspectRatio,zNear,zFar);
+    //TODO: 透视投影后的z分量又有点不对。。。不在 [-1,1]内，目前先使用copy的透视投影计算。
 
-        // perspective -> ortho matrix
-        glm::mat4 pers2Ortho = glm::mat4(0);
-        pers2Ortho[0][0] = n;
-        pers2Ortho[1][1] = n;
-        pers2Ortho[2][3] = 1;
-        pers2Ortho[2][2] = n+f;
-        pers2Ortho[3][2] = (-1)*n*f;
-
-        // cal projection matrix
-        glm::mat4 perspectiveProjectionMatrix = orthoProjectionMatrix * pers2Ortho;
-        return perspectiveProjectionMatrix;
-    }
+//    glm::mat4 MathUtils::calPerspectiveProjectionMatrix(float fov, float aspectRatio, float zNear, float zFar){
+//        //copy from games101
+//        //std::cout<<"using self implement projection matrix"<<std::endl;
+//        float n = zNear;
+//        float f = zFar;
+//
+//        //  matrix for orthographic
+//        glm::mat4 orthoProjectionMatrix = calOrthoProjectionMatrix(fov,aspectRatio,zNear,zFar);
+//
+//        // perspective -> ortho matrix
+//        glm::mat4 pers2Ortho = glm::mat4(0);
+//        pers2Ortho[0][0] = n;
+//        pers2Ortho[1][1] = n;
+//        pers2Ortho[2][3] = 1;
+//        pers2Ortho[2][2] = n+f;
+//        pers2Ortho[3][2] = (-1)*n*f;
+//
+//        // cal projection matrix
+//        glm::mat4 perspectiveProjectionMatrix = orthoProjectionMatrix * pers2Ortho;
+//        return perspectiveProjectionMatrix;
+//    }
 
 
     glm::mat4 MathUtils::calOrthoProjectionMatrix(float fov, float aspectRatio, float zNear, float zFar) {
