@@ -31,7 +31,7 @@ namespace MicroRenderer{
     {
         //copy from https://github.com/ZeusYang/TinySoftRenderer/blob/master/src/TRMathUtils.cpp
         //Setup perspective matrix (camera space -> homogeneous space)
-        std::cout<<"using copy projection matrix"<<std::endl;
+        //std::cout<<"using copy projection matrix"<<std::endl;
         glm::mat4 pMat = glm::mat4(1.0f);
 
         float rFovy = fov * 3.14159265358979323846 / 180;
