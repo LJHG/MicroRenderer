@@ -16,5 +16,6 @@ A self-built soft Rasterizer, called Micro(soft)Renderer.
 
 ## current stage showcase
 <img alt="line rasterization" height="480" src="./images/rotate_triangle.gif" width="640"/>
+<img alt="line rasterization" height="480" src="./images/camera_mvp.gif" width="640"/>
 
 
