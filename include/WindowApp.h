@@ -8,7 +8,8 @@
 #include <string>
 #include "SDL2/SDL.h"
 #include <iostream>
-
+#include "Camera.h"
+#include "LogUtils.h"
 
 namespace MicroRenderer{
     class WindowApp {
@@ -16,7 +17,7 @@ namespace MicroRenderer{
         WindowApp(int width, int height, std::string title);
         virtual ~WindowApp();
         void updateCanvas(uint8_t* pixels,int width, int height,int channel);
-        void processEvent();
+        void processEvent(Camera& camera);
         bool shouldWindowClose();
 
     private:
@@ -24,6 +25,15 @@ namespace MicroRenderer{
         SDL_Surface* windowSurface;
         bool quit;
         SDL_Event event;
+
+        //mouse related settings
+        bool mouseClick;
+        double lastMouseX;
+        double lastMouseY;
+        float mouseDragSpeed = 0.1f;
+        glm::vec3 getCameraFront(Camera& camera, double mouseX, double mouseY);
+
+
     };
 
 }

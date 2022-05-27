@@ -16,6 +16,9 @@ namespace MicroRenderer{
             std::cout << "SDL could not create window with error: " << SDL_GetError() << std::endl;
         }
         windowSurface = SDL_GetWindowSurface(window);
+
+        // mouse initialization
+        mouseClick = false;
     }
 
 
@@ -37,13 +40,71 @@ namespace MicroRenderer{
         SDL_UpdateWindowSurface(window);
     }
 
-    void WindowApp::processEvent() {
+    void WindowApp::processEvent(Camera& camera) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 quit = true;
             }
-            if(event.button.button == SDL_BUTTON_LEFT){
-                std::cout<<"left mouse clicked"<<std::endl;
+            if(event.type == SDL_KEYDOWN){
+                switch (event.key.keysym.sym) {
+                    case 'w':
+                    {
+                        camera.cameraPos += camera.cameraFront * camera.cameraMoveSpeed;
+                        break;
+                    }
+                    case 'a':
+                    {
+                        camera.cameraPos += glm::normalize(glm::cross(camera.cameraFront, camera.worldUp)) * camera.cameraMoveSpeed;
+                        break;
+                    }
+                    case 's':
+                    {
+                        camera.cameraPos -= camera.cameraFront * camera.cameraMoveSpeed;
+                        break;
+                    }
+                    case 'd':
+                    {
+                        camera.cameraPos -= glm::normalize(glm::cross(camera.cameraFront, camera.worldUp)) * camera.cameraMoveSpeed;
+                        break;
+                    }
+                    case SDLK_UP:
+                    {
+                        camera.cameraFront = glm::normalize(camera.cameraFront + camera.worldUp * camera.cameraTurnSpeed);
+                        break;
+                    }
+                    case SDLK_DOWN:
+                    {
+                        camera.cameraFront = glm::normalize(camera.cameraFront - camera.worldUp * camera.cameraTurnSpeed);
+                        break;
+                    }
+                    case SDLK_LEFT:
+                    {
+                        camera.cameraFront = glm::normalize(camera.cameraFront + glm::cross(camera.cameraFront, camera.worldUp) * camera.cameraTurnSpeed);
+                        break;
+                    }
+                    case SDLK_RIGHT:
+                    {
+                        camera.cameraFront = glm::normalize(camera.cameraFront - glm::cross(camera.cameraFront, camera.worldUp) * camera.cameraTurnSpeed);
+                        break;
+                    }
+                }
+                camera.target = camera.cameraPos + camera.cameraFront;
+            }
+            if(event.type == SDL_MOUSEBUTTONDOWN){
+                mouseClick = true;
+                lastMouseX = event.button.x;
+                lastMouseY = event.button.y;
+
+            }
+            if(event.type == SDL_MOUSEBUTTONUP){
+                mouseClick = false;
+            }
+            if(mouseClick){
+                if(event.type == SDL_MOUSEMOTION){
+                    glm::vec3 front  = getCameraFront(camera,event.button.x,event.button.y);
+                    camera.cameraFront =  glm::normalize(camera.cameraFront + front * camera.cameraTurnSpeed * mouseDragSpeed);
+                    camera.target = camera.cameraPos + camera.cameraFront;
+                }
             }
         }
     }
@@ -58,6 +119,20 @@ namespace MicroRenderer{
 //        window = nullptr;
         //maybe some bugs...
         SDL_Quit(); // SDL退出
+    }
+
+    glm::vec3 WindowApp::getCameraFront(Camera& camera, double mouseX, double mouseY) {
+
+        float xOffset = mouseX - lastMouseX;
+        float yOffset = mouseY - lastMouseY;
+        lastMouseX = mouseX;
+        lastMouseY = mouseY;
+
+        glm::vec3 xVec = -xOffset * glm::cross(camera.cameraFront, camera.worldUp);
+        glm::vec3 yVec = -yOffset * camera.worldUp;
+
+        return glm::normalize(xVec + yVec);
+
     }
 
 }
