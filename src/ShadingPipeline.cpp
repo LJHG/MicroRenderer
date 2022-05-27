@@ -128,8 +128,8 @@ namespace MicroRenderer{
        // clip2
        left = std::max(left,0);
        bottom = std::max(bottom,0);
-       right = std::min(right,width);
-       top = std::min(top,height);
+       right = std::min(right,width-1); // need to minus 1, or will draw at the other edge...
+       top = std::min(top,height-1); // need to minus 1, or will draw at the other edge...
 
        for(int x = left;x<=right;x++){
            for(int y=bottom;y<=top;y++){
