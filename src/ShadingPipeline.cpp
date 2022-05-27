@@ -106,15 +106,33 @@ namespace MicroRenderer{
        float x2 = v2.position[0]; float y2 = v2.position[1]; float z2 = v2.position[2];
        float x3 = v3.position[0]; float y3 = v3.position[1]; float z3 = v3.position[2];
 
+       /**
+        * 关于clip是否应该在光栅化时做的问题
+        * 一般来说，clip好像应该在做光栅化前来做，但是如果直接在光栅化时做会十分方便...
+        * 这里我在光栅化时作了两个clip:
+        * 1. 一个判断z，如果z不在[-1,1]内，那么就说明不再视线范围内，直接不画
+        * 2. 另一个对left right bottom top 做一个裁剪，不去管屏幕空间外的像素了
+        */
+       // clip1
+       if(z1<-1.0f || z1 >1.0f || z2<-1.0f || z2 > 1.0f || z3<-1.0f || z3>1.0f){
+           //out of depth range, clip
+           return;
+       }
+
        // get bounding box of the triangle
        int left = static_cast<int>(std::min(std::min(x1,x2),x3));
        int bottom = static_cast<int>(std::min(std::min(y1,y2),y3));
        int right = static_cast<int>(std::max(std::max(x1,x2),x3)) + 1; //ceil
        int top = static_cast<int>(std::max(std::max(y1,y2),y3)) + 1; //ceil
 
+       // clip2
+       left = std::max(left,0);
+       bottom = std::max(bottom,0);
+       right = std::min(right,width);
+       top = std::min(top,height);
+
        for(int x = left;x<=right;x++){
            for(int y=bottom;y<=top;y++){
-               if(x<0 || x>=width || y<0 || y>=height) continue; // out of screen space, do not render
                if(MathUtils::insideTriangle(static_cast<float>(x),static_cast<float>(y),x1,y1,x2,y2,x3,y3)){
                    VertexOutData tmp = MathUtils::barycentricLerp(x,y,v1,v2,v3);
                    int index = y*width+x;
