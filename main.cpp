@@ -14,6 +14,10 @@ using namespace  std;
 const int WIDTH = 640, HEIGHT = 480; // SDL窗口的宽和高
 int main() {
     MicroRenderer::WindowApp app(WIDTH,HEIGHT,"first window");
+
+    // mesh initialize
+    /*
+    // 画两个三角形
     MicroRenderer::VertexData v1,v2,v3,v4,v5,v6;
     //triangle 1 绿色在前
     v1.position = glm::vec3(0,1,1); v1.color=glm::vec4 (255,128,0,0);
@@ -28,12 +32,28 @@ int main() {
     mesh1.asTriangle(v1,v2,v3);
     mesh2.asTriangle(v4,v5,v6);
 
+    std::vector<MicroRenderer::Mesh> meshes{mesh1,mesh2};
+     */
+
+    std::vector<MicroRenderer::Mesh> meshes = MicroRenderer::CommonUtils::loadObjModel("../assets/monkey_head/monkey_head.obj");
+    MicroRenderer::Material material = meshes[0].getMaterial();
+    std::cout<<"ka"<<std::endl;
+    MicroRenderer::LogUtils::log(material.ka);
+    std::cout<<"kd"<<std::endl;
+    MicroRenderer::LogUtils::log(material.kd);
+    std::cout<<"ks"<<std::endl;
+    MicroRenderer::LogUtils::log(material.ks);
+
+    //camera initialize
     MicroRenderer::Camera camera(static_cast<float>(WIDTH),static_cast<float>(HEIGHT));
 
     //renderer initialize
     MicroRenderer::Renderer renderer(WIDTH,HEIGHT);
-    renderer.initShadingPipeline(THREE_D_SHADER);
-
+    renderer.initShadingPipeline(GOURAUD_SHADER);
+    renderer.addDirectionLight(DirectionLight(glm::vec3(0.2f,0.2f,0.2f),
+                                              glm::vec3(0.5f,0.5f,0.5f),
+                                              glm::vec3(1.0f,1.0f,1.0f),
+                                              glm::vec3(-0.2f,-0.1f,-0.3f)));
 
     auto start = chrono::system_clock::now();
     while(!app.shouldWindowClose()){
@@ -43,22 +63,9 @@ int main() {
         //std::cout<<elapsed_seconds.count()<<std::endl;
         app.processEvent(camera);
 
-        //set view and projection matrix according to the state of camera
-        renderer.setViewMatrix(MicroRenderer::MathUtils::calViewMatrix(camera.cameraPos,
-                                                                       camera.target,
-                                                                       camera.worldUp));
-        renderer.setProjectionMatrix(MicroRenderer::MathUtils::calPerspectiveProjectionMatrix(camera.fov,
-                                                                                              camera.aspectRatio,
-                                                                                              camera.zNear,
-                                                                                              camera.zFar));
-
-        glm::mat4 model(1.0f);
-        //model = MicroRenderer::MathUtils::rotationByX(model,sin(elapsed_seconds.count())*180);
-
         //render
-        mesh1.setModelMatrix(model);
-        renderer.setMeshes(std::vector<MicroRenderer::Mesh>{mesh1,mesh2});
-        renderer.render();
+        renderer.setMeshes(meshes);
+        renderer.render(camera);
         uint8_t* pixels = renderer.getPixelBuffer();
         app.updateCanvas(pixels,WIDTH,HEIGHT, 3);
 

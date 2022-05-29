@@ -12,7 +12,7 @@ namespace MicroRenderer{
         aspectRatio = width/height;
         zNear = 0.1f;
         zFar = 100.0f;
-        cameraPos = glm::vec3(0,0,0);
+        cameraPos = glm::vec3(0,0,-2);
         cameraFront = glm::vec3(0,0,1);
         target = cameraPos + cameraFront;
         worldUp = glm::vec3 (0,1,0);

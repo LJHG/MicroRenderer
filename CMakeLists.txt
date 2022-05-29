@@ -28,7 +28,7 @@ add_executable(MicroRenderer
         src/LogUtils.cpp
         include/LogUtils.h
         src/Camera.cpp
-        include/Camera.h)
+        include/Camera.h src/Light.cpp include/Light.h)
 
 add_executable(test
         test.cpp
