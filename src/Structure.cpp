@@ -39,7 +39,22 @@ namespace MicroRenderer{
         modelMatrix = m;
     }
 
+    void Mesh::setMaterial(Material _material) {
+        material = _material;
+    }
+
     glm::mat4 Mesh::getModelMatrix() {
         return modelMatrix;
+    }
+
+    void Mesh::addVertex(VertexData v) {
+        vertices.push_back(v);
+    }
+    void Mesh::addIndex(unsigned int idx) {
+        indices.push_back(idx);
+    }
+
+    Material Mesh::getMaterial() {
+        return material;
     }
 }
