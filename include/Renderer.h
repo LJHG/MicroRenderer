@@ -9,9 +9,11 @@
 #include "ShadingPipeline.h"
 #include "Shader.h"
 #include "Structure.h"
+#include "Camera.h"
 
 #define SIMPLE_SHADER 1
 #define THREE_D_SHADER 2
+#define GOURAUD_SHADER 3
 
 namespace MicroRenderer{
     class Renderer{
@@ -23,7 +25,8 @@ namespace MicroRenderer{
         void initShadingPipeline(int shadingMode);
         //render
         void setMeshes(const std::vector<Mesh>& _meshes);
-        void render();
+        void addDirectionLight(DirectionLight light);
+        void render(Camera& camera);
         uint8_t* getPixelBuffer();
     private:
         int width;

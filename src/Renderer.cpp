@@ -29,7 +29,11 @@ namespace MicroRenderer{
         }
         else if(shadingMode == THREE_D_SHADER){
             shader = new ThreeDShader(modelMatrix,viewMatrix,projectionMatrix);
-        }else{
+        }
+        else if(shadingMode == GOURAUD_SHADER){
+            shader = new GouraudShader(modelMatrix,viewMatrix,projectionMatrix);
+        }
+        else{
             //do nothing
         }
         shadingPipeline = new ShadingPipeline(width,height,shader);
@@ -43,13 +47,24 @@ namespace MicroRenderer{
         projectionMatrix = glm::mat4(1.0f);
     }
 
-    void Renderer::render() {
+    void Renderer::render(Camera& camera) {
         if(meshes.empty()){
             std::cout<<"nothing to draw"<<std::endl;
         }
         shadingPipeline->clearBuffer();
+        //set view matrix and projection matrix according to camera
+        shadingPipeline->shader->setViewMatrix(MicroRenderer::MathUtils::calViewMatrix(camera.cameraPos,
+                                                                                       camera.target,
+                                                                                       camera.worldUp));
+        shadingPipeline->shader->setProjectionMatrix(MicroRenderer::MathUtils::calPerspectiveProjectionMatrix(camera.fov,
+                                                                                                              camera.aspectRatio,
+                                                                                                                      camera.zNear,camera.zFar));
+        shadingPipeline->shader->setEyePos(camera.cameraPos);
+
+        //draw mesh
         for(Mesh m : meshes){
             // draw mesh one by one
+            shadingPipeline->shader->setMaterial(m.getMaterial());
             shadingPipeline->shader->setModelMatrix(m.getModelMatrix());
             shadingPipeline->shade(m.getVertices(),m.getIndices(),FILL);
         }
@@ -62,6 +77,10 @@ namespace MicroRenderer{
     uint8_t *Renderer::getPixelBuffer() {
         pixelBuffer = shadingPipeline->getResult();
         return pixelBuffer;
+    }
+
+    void Renderer::addDirectionLight(DirectionLight light) {
+        shadingPipeline->shader->addDirectionLight(light);
     }
 
 }
