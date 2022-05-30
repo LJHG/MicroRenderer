@@ -8,24 +8,24 @@
 namespace MicroRenderer{
 
     /**** copy view matrix and projection matrix ****/
-//    glm::mat4 MathUtils::calViewMatrix(glm::vec3 cameraPos, glm::vec3 target, glm::vec3 worldUp){
-//        //copy from https://github.com/ZeusYang/TinySoftRenderer/blob/master/src/TRMathUtils.cpp
-//        std::cout<<"using copy view matrix"<<std::endl;
-//        glm::mat4 vMat;
-//        glm::vec3 zAxis = glm::normalize(cameraPos - target);
-//        glm::vec3 xAxis = glm::normalize(glm::cross(worldUp, zAxis));
-//        glm::vec3 yAxis = glm::normalize(glm::cross(zAxis, xAxis));
-//
-//        vMat[0][0] = xAxis.x; vMat[0][1] = yAxis.x; vMat[0][2] = zAxis.x; vMat[0][3] = 0.0f;
-//        vMat[1][0] = xAxis.y; vMat[1][1] = yAxis.y; vMat[1][2] = zAxis.y; vMat[1][3] = 0.0f;
-//        vMat[2][0] = xAxis.z; vMat[2][1] = yAxis.z; vMat[2][2] = zAxis.z; vMat[2][3] = 0.0f;
-//        vMat[3][0] = -glm::dot(xAxis, cameraPos);
-//        vMat[3][1] = -glm::dot(yAxis, cameraPos);
-//        vMat[3][2] = -glm::dot(zAxis, cameraPos);
-//        vMat[3][3] = 1.0f;
-//
-//        return vMat;
-//    }
+    glm::mat4 MathUtils::calViewMatrix(glm::vec3 cameraPos, glm::vec3 target, glm::vec3 worldUp){
+        //copy from https://github.com/ZeusYang/TinySoftRenderer/blob/master/src/TRMathUtils.cpp
+        std::cout<<"using copy view matrix"<<std::endl;
+        glm::mat4 vMat;
+        glm::vec3 zAxis = glm::normalize(cameraPos - target);
+        glm::vec3 xAxis = glm::normalize(glm::cross(worldUp, zAxis));
+        glm::vec3 yAxis = glm::normalize(glm::cross(zAxis, xAxis));
+
+        vMat[0][0] = xAxis.x; vMat[0][1] = yAxis.x; vMat[0][2] = zAxis.x; vMat[0][3] = 0.0f;
+        vMat[1][0] = xAxis.y; vMat[1][1] = yAxis.y; vMat[1][2] = zAxis.y; vMat[1][3] = 0.0f;
+        vMat[2][0] = xAxis.z; vMat[2][1] = yAxis.z; vMat[2][2] = zAxis.z; vMat[2][3] = 0.0f;
+        vMat[3][0] = -glm::dot(xAxis, cameraPos);
+        vMat[3][1] = -glm::dot(yAxis, cameraPos);
+        vMat[3][2] = -glm::dot(zAxis, cameraPos);
+        vMat[3][3] = 1.0f;
+
+        return vMat;
+    }
 
     glm::mat4 MathUtils::calPerspectiveProjectionMatrix(float fov, float aspectRatio, float zNear, float zFar)
     {
@@ -45,33 +45,36 @@ namespace MicroRenderer{
     }
 
     /**** self implement view matrix and projection matrix ****/
-    glm::mat4 MathUtils::calViewMatrix(glm::vec3 cameraPos, glm::vec3 target, glm::vec3 worldUp){
-        //self implementing -> according to games101 p3
-        //std::cout<<"using self implement view matrix"<<std::endl;
-        glm::mat4 vMat;
 
-        glm::mat4 rotation(1.0f);
-        glm::mat4 translation(1.0f);
+    //TODO: 自己实现的计算view matrix的函数也不太对。。。先使用copy的版本
 
-        target = glm::normalize(target-cameraPos); //the input target is a position, we need to transform it to a vector
-
-        glm::vec3 g_cross_t = glm::cross(target,worldUp);
-
-        // rotation matrix
-        //first row
-        rotation[0][0] = g_cross_t[0]; rotation[1][0] = g_cross_t[1]; rotation[2][0] = g_cross_t[2];
-        //second row
-        rotation[0][1] = worldUp[0]; rotation[1][1] = worldUp[1]; rotation[2][1] = worldUp[2];
-        //third row
-        rotation[0][2] = -target[0]; rotation[1][2] = -target[1]; rotation[2][2] = -target[2];
-
-        //translation matrix
-        // last column
-        translation[3][0] = -cameraPos[0]; translation[3][1] = -cameraPos[1]; translation[3][2] = -cameraPos[2];
-        vMat = rotation * translation;
-
-        return vMat;
-    }
+//    glm::mat4 MathUtils::calViewMatrix(glm::vec3 cameraPos, glm::vec3 target, glm::vec3 worldUp){
+//        //self implementing -> according to games101 p3
+//        //std::cout<<"using self implement view matrix"<<std::endl;
+//        glm::mat4 vMat;
+//
+//        glm::mat4 rotation(1.0f);
+//        glm::mat4 translation(1.0f);
+//
+//        target = glm::normalize(target-cameraPos); //the input target is a position, we need to transform it to a vector
+//
+//        glm::vec3 g_cross_t = glm::cross(target,worldUp);
+//
+//        // rotation matrix
+//        //first row
+//        rotation[0][0] = g_cross_t[0]; rotation[1][0] = g_cross_t[1]; rotation[2][0] = g_cross_t[2];
+//        //second row
+//        rotation[0][1] = worldUp[0]; rotation[1][1] = worldUp[1]; rotation[2][1] = worldUp[2];
+//        //third row
+//        rotation[0][2] = -target[0]; rotation[1][2] = -target[1]; rotation[2][2] = -target[2];
+//
+//        //translation matrix
+//        // last column
+//        translation[3][0] = -cameraPos[0]; translation[3][1] = -cameraPos[1]; translation[3][2] = -cameraPos[2];
+//        vMat = rotation * translation;
+//
+//        return vMat;
+//    }
 
 
     //TODO: 透视投影后的z分量又有点不对。。。不在 [-1,1]内，目前先使用copy的透视投影计算。
