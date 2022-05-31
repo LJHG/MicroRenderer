@@ -161,6 +161,7 @@ namespace MicroRenderer{
         // TODO:关于三维空间的插值是否可以这样做的问题。。。。 目前先使用直接插值的方法
         vResult.worldPos = v1.worldPos * alpha  + v2.worldPos * beta +  v3.worldPos*gamma;
         vResult.normal = v1.normal * alpha  + v2.normal * beta + v3.normal*gamma;
+        vResult.textureCoord = v1.textureCoord * alpha  + v2.textureCoord * beta + v3.textureCoord*gamma;
 
         return vResult;
     }
