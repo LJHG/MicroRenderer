@@ -33,6 +33,7 @@ namespace MicroRenderer{
 
     Mesh::Mesh() {
         modelMatrix = glm::mat4(1.0f);
+        textureUrl = "none";
     }
 
     void Mesh::setModelMatrix(const glm::mat4 &m) {
@@ -97,5 +98,13 @@ namespace MicroRenderer{
         indices.push_back(0);indices.push_back(2);indices.push_back(4);
         indices.push_back(2);indices.push_back(4);indices.push_back(6);
 
+    }
+
+    void Mesh::setTextureUrl(std::string _textureUrl) {
+        textureUrl = _textureUrl;
+    }
+
+    std::string Mesh::getTextureUrl() {
+        return textureUrl;
     }
 }

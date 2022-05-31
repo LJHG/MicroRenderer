@@ -36,7 +36,6 @@ namespace MicroRenderer{
         glm::vec3 position;
         glm::vec3 normal;
         glm::vec4 color; //如果是Phong shader, 那么就不使用color这个属性，而是去查询纹理或者直接用材质
-        bool hasTexture; //如果有纹理，那么把material的 kd 替换为纹理取到的颜色
         glm::vec2 textureCoord; // 纹理坐标
     };
     struct VertexOutData{
@@ -44,7 +43,6 @@ namespace MicroRenderer{
         glm::vec3 worldPos; //世界坐标
         glm::vec3 normal;
         glm::vec4 color;
-        bool hasTexture; //如果有纹理，那么把material的 kd 替换为纹理取到的颜色
         glm::vec2 textureCoord; // 纹理坐标
     };
 
@@ -60,11 +58,13 @@ namespace MicroRenderer{
         std::vector<VertexData>& getVertices();
         std::vector<unsigned int>& getIndices();
         Material getMaterial();
+        std::string getTextureUrl();
         void setVertices(const std::vector<VertexData>& _vertices);
         void setIndices(const std::vector<unsigned int>& _indices);
         void setMaterial(Material _material);
         void addVertex(VertexData v);
         void addIndex(unsigned int idx);
+        void setTextureUrl(std::string _textureUrl);
 
         /** set model matrix **/
         void setModelMatrix(const glm::mat4& m);
@@ -80,6 +80,7 @@ namespace MicroRenderer{
         std::vector<VertexData> vertices;
         std::vector<unsigned int> indices;
         Material material;
+        std::string textureUrl;
         glm::mat4 modelMatrix;
     };
 }
