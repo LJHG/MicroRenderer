@@ -105,7 +105,6 @@ namespace MicroRenderer{
        float x1 = v1.position[0]; float y1 = v1.position[1]; float z1 = v1.position[2];
        float x2 = v2.position[0]; float y2 = v2.position[1]; float z2 = v2.position[2];
        float x3 = v3.position[0]; float y3 = v3.position[1]; float z3 = v3.position[2];
-
        /**
         * 关于clip是否应该在光栅化时做的问题
         * 一般来说，clip好像应该在做光栅化前来做，但是如果直接在光栅化时做会十分方便...

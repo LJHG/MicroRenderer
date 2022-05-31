@@ -16,7 +16,7 @@ int main() {
     MicroRenderer::WindowApp app(WIDTH,HEIGHT,"first window");
 
     // mesh initialize
-    std::vector<MicroRenderer::Mesh> meshes = MicroRenderer::CommonUtils::loadObjModel("../assets/scene1/scene1.obj");
+    std::vector<MicroRenderer::Mesh> meshes = MicroRenderer::CommonUtils::loadObjModel("../assets/rock/rock.obj");
 
     //camera initialize
     MicroRenderer::Camera camera(static_cast<float>(WIDTH),static_cast<float>(HEIGHT));
