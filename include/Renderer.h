@@ -14,6 +14,7 @@
 #define SIMPLE_SHADER 1
 #define THREE_D_SHADER 2
 #define GOURAUD_SHADER 3
+#define PHONG_SHADER 4
 
 namespace MicroRenderer{
     class Renderer{

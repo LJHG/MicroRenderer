@@ -33,6 +33,9 @@ namespace MicroRenderer{
         else if(shadingMode == GOURAUD_SHADER){
             shader = new GouraudShader(modelMatrix,viewMatrix,projectionMatrix);
         }
+        else if(shadingMode == PHONG_SHADER){
+            shader = new PhongShader(modelMatrix,viewMatrix,projectionMatrix);
+        }
         else{
             //do nothing
         }
