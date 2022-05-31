@@ -82,7 +82,7 @@ namespace MicroRenderer{
                     vvv.x = aiMesh->mNormals[j].x;
                     vvv.y = aiMesh->mNormals[j].y;
                     vvv.z = aiMesh->mNormals[j].z;
-                    vertexData.normal = vvv;
+                    vertexData.normal = glm::normalize(vvv); // 法线记得要归一化
 
                     // 纹理坐标: 如果存在则加入。assimp 默认可以有多个纹理坐标 我们取第一个（0）即可
                     glm::vec2 vv(0, 0);
@@ -120,7 +120,7 @@ namespace MicroRenderer{
                         glm::vec3 kd = glm::vec3(color.r,color.g, color.b);
                         material->Get(AI_MATKEY_COLOR_SPECULAR, color);
                         glm::vec3 ks = glm::vec3(color.r,color.g, color.b);
-                        mesh.setMaterial(Material(ka,kd,ks,32.0f)); // set shininess at 32.0f...
+                        mesh.setMaterial(Material(ka,kd,ks,16.0f)); // set shininess at 16.0f...
                     }
                     else{
                         //有漫反射贴图，记录 ka ,ks，并且把贴图路径记录下来
