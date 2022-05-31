@@ -3,6 +3,7 @@
 //
 
 #include "Shader.h"
+#include "MathUtils.h"
 
 namespace MicroRenderer{
     /**** Base Shader ****/
@@ -25,8 +26,12 @@ namespace MicroRenderer{
         eyePos = _eyePos;
     }
 
-    void Shader::addDirectionLight(DirectionLight light) {
+    void Shader::addDirectionLight(DirectionLight* light) {
         directionLights.push_back(light);
+    }
+
+    void Shader::addPointLight(PointLight* light) {
+        pointLights.push_back(light);
     }
 
     void Shader::setTexture(std::string _textureUrl) {
@@ -103,17 +108,37 @@ namespace MicroRenderer{
 
         //directional lights
         for(const auto& light:directionLights){
-            glm::vec3 lightDir = glm::normalize(-light.direction);
-            glm::vec3 viewDir = glm::normalize(eyePos - v.position);
+            glm::vec3 lightDir = glm::normalize(-light->direction); // pos -> light
+            glm::vec3 viewDir = glm::normalize(eyePos - v.position); // pos -> view
             glm::vec3 half = glm::normalize(lightDir + viewDir); // 半程向量
-            glm::vec3 L_a = light.ambient * ka;
-            glm::vec3 L_d = light.diffuse * kd * std::max(0.0f,glm::dot(v.normal,lightDir));
-            glm::vec3 L_s = light.specular * ks * std::max(0.0f,glm::dot(v.normal,half));
+            glm::vec3 L_a = light->ambient * kd;
+            glm::vec3 L_d = light->diffuse * kd * std::max(0.0f,glm::dot(v.normal,lightDir));
+            glm::vec3 L_s = light->specular * ks * pow(std::max(0.0f,glm::dot(v.normal,half)),material.shininess);
 
-            color += (L_a + L_d + L_s);
+
+            color += (L_a + L_d + L_s)*255.0f;
         }
-        vod.color = glm::vec4(color,1.0f)*255.0f;
-        LogUtils::log(vod.color);
+
+        //point lights
+        for(const auto& light:pointLights){
+            glm::vec3 lightDir = glm::normalize(light->position - v.position); // pos -> light
+            glm::vec3 viewDir = glm::normalize(eyePos - v.position); // pos -> view
+            glm::vec3 half = glm::normalize(lightDir + viewDir); // 半程向量
+
+            float distance = MathUtils::calPoint2PointSquareDistance(v.position,light->position);
+
+            glm::vec3 L_d = light->diffuse * kd * std::max(0.0f,glm::dot(v.normal,lightDir));
+            glm::vec3 L_s = light->specular * ks * pow(std::max(0.0f,glm::dot(v.normal,half)),material.shininess);
+
+
+            color += (L_d/distance + L_s/distance)*255.0f;
+        }
+
+
+        color = glm::vec3(std::min(color[0],255.0f), std::min(color[1],255.0f),std::min(color[2],255.0f));
+
+        vod.color = glm::vec4(color,1.0f);
+
         return vod;
     }
 

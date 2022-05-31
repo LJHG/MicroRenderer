@@ -23,7 +23,8 @@ namespace MicroRenderer{
         //Gouraud and phong shader needed
         void setMaterial(Material _material);
         void setEyePos(glm::vec3 _eyePos);
-        void addDirectionLight(DirectionLight light);
+        void addDirectionLight(DirectionLight* light);
+        void addPointLight(PointLight* light);
         void setTexture(std::string _textureUrl);
 
     protected:
@@ -33,7 +34,8 @@ namespace MicroRenderer{
 
         //Gouraud and phong shader needed
         std::string textureUrl;
-        std::vector<DirectionLight> directionLights; // multiple lights
+        std::vector<DirectionLight*> directionLights; // multiple lights
+        std::vector<PointLight*> pointLights;
         Material material;
         glm::vec3 eyePos;
     };
