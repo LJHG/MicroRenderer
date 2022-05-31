@@ -29,10 +29,10 @@ int main() {
                                               glm::vec3(0.5f,0.5f,0.5f),
                                               glm::vec3(-0.2f,-0.1f,-0.3f)));
 
-    glm::vec3 pointLightPos = glm::vec3(0.7f,3.2f,-5.0f);
+    glm::vec3 pointLightPos = glm::vec3(0.7f,1.2f,-3.0f);
     PointLight light1(glm::vec3(0.2f,0.2f,0.2f),
                       glm::vec3(0.5f,0.5f,0.5f),
-                      glm::vec3(0.5f,0.5f,0.5f),
+                      glm::vec3(1.0f,1.0f,1.0f),
                       pointLightPos);
 
     renderer.addPointLight(&light1);
@@ -49,10 +49,11 @@ int main() {
         //处理事件
         auto end = chrono::system_clock::now();
         std::chrono::duration<double> elapsed_seconds = end-start;
+        glm::vec3 lightOffset = glm::vec3(3*sin(elapsed_seconds.count()),0,3*cos(elapsed_seconds.count()));
         //std::cout<<elapsed_seconds.count()<<std::endl;
-        light1.setLightPos(pointLightPos + glm::vec3(3*sin(elapsed_seconds.count()),3*cos(elapsed_seconds.count()),3*sin(elapsed_seconds.count())));
+        light1.setLightPos(pointLightPos + lightOffset);
         MicroRenderer::Mesh& pointLightMesh = meshes.back();
-        pointLightMesh.asCube(pointLightPos + glm::vec3(3*sin(elapsed_seconds.count()),3*cos(elapsed_seconds.count()),3*sin(elapsed_seconds.count())),0.2f, MicroRenderer::Material(glm::vec3(0.1f,0.1f,0.1f),
+        pointLightMesh.asCube(pointLightPos + lightOffset,0.2f, MicroRenderer::Material(glm::vec3(0.1f,0.1f,0.1f),
                                                                           glm::vec3(1000.0f,1000.0f,1000.0f),
                                                                           glm::vec3(0.1f,0.1f,0.1f),
                                                                           32.0f));
