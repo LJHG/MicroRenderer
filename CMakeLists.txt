@@ -36,6 +36,8 @@ add_executable(test
         include/LogUtils.h
         src/Structure.cpp
         include/Structure.h
+        src/CommonUtils.cpp
+        include/CommonUtils.h
         )
 
 
