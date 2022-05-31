@@ -70,6 +70,16 @@ namespace MicroRenderer{
         glm::vec4 fragmentShader(VertexOutData &v) override;
     };
 
+    /**
+     * Phong shader, DO interpolate normal, and calculate color at fragmentShader stage
+     */
+    class PhongShader : public Shader{
+    public:
+        PhongShader(glm::mat4 _modelMatrix,glm::mat4 _viewMatrix,glm::mat4 _projectionMatrix);
+        VertexOutData vertexShader(VertexData &v) override;
+        glm::vec4 fragmentShader(VertexOutData &v) override;
+    };
+
 
 }
 

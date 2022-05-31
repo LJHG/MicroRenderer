@@ -87,6 +87,7 @@ namespace MicroRenderer{
         projectionMatrix = _projectionMatrix;
         //
         directionLights.clear();
+        pointLights.clear();
         textureUrl = "none";
     }
 
@@ -146,7 +147,73 @@ namespace MicroRenderer{
         return v.color;
     }
 
+    /**** Phong Shader****/
+    PhongShader::PhongShader(glm::mat4 _modelMatrix, glm::mat4 _viewMatrix, glm::mat4 _projectionMatrix) {
+        modelMatrix = _modelMatrix;
+        viewMatrix = _viewMatrix;
+        projectionMatrix = _projectionMatrix;
+        //
+        directionLights.clear();
+        pointLights.clear();
+        textureUrl = "none";
+    }
 
+    VertexOutData PhongShader::vertexShader(VertexData &v) {
+        VertexOutData vod;
+        vod.position = glm::vec4(v.position,1.0f);
+        vod.position = projectionMatrix * viewMatrix * modelMatrix * vod.position; //mvp transformation
+        vod.worldPos = modelMatrix * glm::vec4(v.position,1.0f);  // vec3 = vec4...
+        vod.normal = v.normal;
+
+        return vod;
+    }
+
+    glm::vec4 PhongShader::fragmentShader(VertexOutData &v) {
+        // 计算着色
+        glm::vec3 ka = material.ka;
+        glm::vec3 kd = material.kd;
+        if(textureUrl != "none"){
+            glm::vec3 kd = material.kd;
+        }
+        glm::vec3 ks = material.ks;
+
+        glm::vec3 color(0.0f,0.0f,0.0f);
+
+        //directional lights
+        for(const auto& light:directionLights){
+            glm::vec3 lightDir = glm::normalize(-light->direction); // pos -> light
+            glm::vec3 viewDir = glm::normalize(eyePos - v.worldPos); // pos -> view
+            glm::vec3 half = glm::normalize(lightDir + viewDir); // 半程向量
+            glm::vec3 L_a = light->ambient * kd;
+            glm::vec3 L_d = light->diffuse * kd * std::max(0.0f,glm::dot(v.normal,lightDir));
+            glm::vec3 L_s = light->specular * ks * pow(std::max(0.0f,glm::dot(v.normal,half)),material.shininess);
+
+
+            color += (L_a + L_d + L_s)*255.0f;
+        }
+
+        //point lights
+        for(const auto& light:pointLights){
+            glm::vec3 lightDir = glm::normalize(light->position - v.worldPos); // pos -> light
+            glm::vec3 viewDir = glm::normalize(eyePos - v.worldPos); // pos -> view
+            glm::vec3 half = glm::normalize(lightDir + viewDir); // 半程向量
+
+            float distance = MathUtils::calPoint2PointSquareDistance(v.worldPos,light->position);
+
+            glm::vec3 L_d = light->diffuse * kd * std::max(0.0f,glm::dot(v.normal,lightDir));
+            glm::vec3 L_s = light->specular * ks * pow(std::max(0.0f,glm::dot(v.normal,half)),material.shininess);
+
+
+            color += (L_d/distance + L_s/distance)*255.0f;
+        }
+
+
+        color = glm::vec3(std::min(color[0],255.0f), std::min(color[1],255.0f),std::min(color[2],255.0f));
+
+
+
+        return glm::vec4(color,1.0f);
+    }
 
 
 }
