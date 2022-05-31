@@ -40,7 +40,8 @@ namespace MicroRenderer{
         glm::vec2 textureCoord; // 纹理坐标
     };
     struct VertexOutData{
-        glm::vec4 position;
+        glm::vec4 position; //经过mvp变换后的坐标
+        glm::vec3 worldPos; //世界坐标
         glm::vec3 normal;
         glm::vec4 color;
         bool hasTexture; //如果有纹理，那么把material的 kd 替换为纹理取到的颜色
