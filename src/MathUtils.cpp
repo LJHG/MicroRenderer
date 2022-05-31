@@ -157,8 +157,10 @@ namespace MicroRenderer{
                                                         v3.position[0],v3.position[1]);
         VertexOutData vResult;
         vResult.position = v1.position * alpha  + v2.position * beta +  v3.position*gamma;
-        vResult.normal = v1.normal * alpha  + v2.normal * beta + v3.normal*gamma;
         vResult.color = v1.color * alpha  + v2.color * beta +  v3.color*gamma;
+        // TODO:关于三维空间的插值是否可以这样做的问题。。。。 目前先使用直接插值的方法
+        vResult.worldPos = v1.worldPos * alpha  + v2.worldPos * beta +  v3.worldPos*gamma;
+        vResult.normal = v1.normal * alpha  + v2.normal * beta + v3.normal*gamma;
 
         return vResult;
     }
