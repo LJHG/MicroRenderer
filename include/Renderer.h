@@ -25,7 +25,8 @@ namespace MicroRenderer{
         void initShadingPipeline(int shadingMode);
         //render
         void setMeshes(const std::vector<Mesh>& _meshes);
-        void addDirectionLight(DirectionLight light);
+        void addDirectionLight(DirectionLight* light);
+        void addPointLight(PointLight* light);
         void render(Camera& camera);
         uint8_t* getPixelBuffer();
     private:

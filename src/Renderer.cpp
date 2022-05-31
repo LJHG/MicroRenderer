@@ -79,8 +79,12 @@ namespace MicroRenderer{
         return pixelBuffer;
     }
 
-    void Renderer::addDirectionLight(DirectionLight light) {
+    void Renderer::addDirectionLight(DirectionLight* light) {
         shadingPipeline->shader->addDirectionLight(light);
+    }
+
+    void Renderer::addPointLight(PointLight* light) {
+        shadingPipeline->shader->addPointLight(light);
     }
 
 }
