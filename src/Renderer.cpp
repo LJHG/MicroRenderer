@@ -68,6 +68,7 @@ namespace MicroRenderer{
         for(Mesh m : meshes){
             // draw mesh one by one
             shadingPipeline->shader->setMaterial(m.getMaterial());
+            shadingPipeline->shader->setTexture(m.getTextureUrl());
             shadingPipeline->shader->setModelMatrix(m.getModelMatrix());
             shadingPipeline->shade(m.getVertices(),m.getIndices(),FILL);
         }

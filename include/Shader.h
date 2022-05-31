@@ -9,6 +9,7 @@
 #include <iostream>
 #include "LogUtils.h"
 #include "Light.h"
+#include "CommonUtils.h"
 
 namespace MicroRenderer{
     class Shader {
@@ -34,6 +35,7 @@ namespace MicroRenderer{
 
         //Gouraud and phong shader needed
         std::string textureUrl;
+        Image texture;
         std::vector<DirectionLight*> directionLights; // multiple lights
         std::vector<PointLight*> pointLights;
         Material material;

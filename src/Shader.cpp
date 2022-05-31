@@ -36,6 +36,7 @@ namespace MicroRenderer{
 
     void Shader::setTexture(std::string _textureUrl) {
         textureUrl = _textureUrl;
+        texture = CommonUtils::loadImage(textureUrl);
     }
 
     /**** Simple Shader ****/
@@ -101,7 +102,12 @@ namespace MicroRenderer{
         glm::vec3 ka = material.ka;
         glm::vec3 kd = material.kd;
         if(textureUrl != "none"){
-            glm::vec3 kd = material.kd;
+            int xIdx = v.textureCoord[0] * texture.width;
+            int yIdx = (1-v.textureCoord[1]) * texture.height;
+            int idx = (yIdx * texture.width + xIdx)*3;
+            kd = glm::vec3(texture.pixels[idx+0]/255.0f,
+                           texture.pixels[idx+1]/255.0f,
+                           texture.pixels[idx+2]/255.0f);
         }
         glm::vec3 ks = material.ks;
 
@@ -164,6 +170,7 @@ namespace MicroRenderer{
         vod.position = projectionMatrix * viewMatrix * modelMatrix * vod.position; //mvp transformation
         vod.worldPos = modelMatrix * glm::vec4(v.position,1.0f);  // vec3 = vec4...
         vod.normal = v.normal;
+        vod.textureCoord = v.textureCoord;
 
         return vod;
     }
@@ -173,7 +180,12 @@ namespace MicroRenderer{
         glm::vec3 ka = material.ka;
         glm::vec3 kd = material.kd;
         if(textureUrl != "none"){
-            glm::vec3 kd = material.kd;
+            int xIdx = v.textureCoord[0] * texture.width;
+            int yIdx = (1-v.textureCoord[1]) * texture.height;
+            int idx = (yIdx * texture.width + xIdx)*3;
+            kd = glm::vec3(texture.pixels[idx+0]/255.0f,
+                           texture.pixels[idx+1]/255.0f,
+                           texture.pixels[idx+2]/255.0f);
         }
         glm::vec3 ks = material.ks;
 

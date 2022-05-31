@@ -20,6 +20,12 @@ namespace MicroRenderer{
         int width;
         int height;
         int channel;
+        Image(){
+            pixels = nullptr;
+            width = 0;
+            height = 0;
+            channel = 0;
+        }
         Image(uint8_t* _pixels, int _width, int _height, int _channel){
             pixels = _pixels;
             width = _width;
@@ -125,7 +131,17 @@ namespace MicroRenderer{
                     else{
                         //有漫反射贴图，记录 ka ,ks，并且把贴图路径记录下来
                         std::cout<<"has texture"<<std::endl;
-
+                        aiColor3D color;
+                        material->Get(AI_MATKEY_COLOR_AMBIENT, color);
+                        glm::vec3 ka = glm::vec3(color.r,color.g, color.b);
+                        glm::vec3 kd = glm::vec3(0.0f,0.0f, 0.0f);
+                        material->Get(AI_MATKEY_COLOR_SPECULAR, color);
+                        glm::vec3 ks = glm::vec3(color.r,color.g, color.b);
+                        mesh.setMaterial(Material(ka,kd,ks,16.0f)); // set shininess at 16.0f...
+                        // 贴图路径
+                        aiString _textureUrl;
+                        material->GetTexture(aiTextureType_DIFFUSE,0,&_textureUrl);
+                        mesh.setTextureUrl(rootPath + "/" + _textureUrl.C_Str());
                     }
                 }
 
