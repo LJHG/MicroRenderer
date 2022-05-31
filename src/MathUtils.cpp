@@ -10,7 +10,7 @@ namespace MicroRenderer{
     /**** copy view matrix and projection matrix ****/
     glm::mat4 MathUtils::calViewMatrix(glm::vec3 cameraPos, glm::vec3 target, glm::vec3 worldUp){
         //copy from https://github.com/ZeusYang/TinySoftRenderer/blob/master/src/TRMathUtils.cpp
-        std::cout<<"using copy view matrix"<<std::endl;
+//        std::cout<<"using copy view matrix"<<std::endl;
         glm::mat4 vMat;
         glm::vec3 zAxis = glm::normalize(cameraPos - target);
         glm::vec3 xAxis = glm::normalize(glm::cross(worldUp, zAxis));
@@ -202,6 +202,10 @@ namespace MicroRenderer{
         rotationMatrix[1][1] = cos(degree); rotationMatrix[1][2] = sin(degree);
         rotationMatrix[2][1] = -sin(degree);rotationMatrix[2][2] = cos(degree);
         return rotationMatrix * matrix;
+    }
+
+    float MathUtils::calPoint2PointSquareDistance(glm::vec3 pos1, glm::vec3 pos2) {
+        return (pos1[0]-pos2[0])*(pos1[0]-pos2[0]) + (pos1[1]-pos2[1])*(pos1[1]-pos2[1]) + (pos1[2]-pos2[2])*(pos1[2]-pos2[2]);
     }
 
 

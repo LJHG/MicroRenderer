@@ -39,6 +39,7 @@ namespace MicroRenderer{
         /*** trivial ***/
         static bool insideTriangle(float x, float y, float x1, float y1, float x2, float y2, float x3, float y3);
         static float crossProduct(float a1, float a2, float b1, float b2);
+        static float calPoint2PointSquareDistance(glm::vec3 pos1, glm::vec3 pos2);
 
     };
 }
