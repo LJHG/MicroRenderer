@@ -11,9 +11,10 @@
 namespace MicroRenderer{
     class LogUtils {
     public:
-        static void log(glm::mat4& matrix);
-        static void log(glm::vec3& vector);
-        static void log(glm::vec4& vector);
+        static void log(glm::mat4 matrix);
+        static void log(glm::vec2 vector);
+        static void log(glm::vec3 vector);
+        static void log(glm::vec4 vector);
     };
 }
 
