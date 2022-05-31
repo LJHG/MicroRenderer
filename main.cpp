@@ -23,16 +23,16 @@ int main() {
 
     //renderer initialize
     MicroRenderer::Renderer renderer(WIDTH,HEIGHT);
-    renderer.initShadingPipeline(GOURAUD_SHADER);
+    renderer.initShadingPipeline(PHONG_SHADER);
     renderer.addDirectionLight(new DirectionLight(glm::vec3(0.2f,0.2f,0.2f),
                                               glm::vec3(0.5f,0.5f,0.5f),
-                                              glm::vec3(1.0f,1.0f,1.0f),
+                                              glm::vec3(0.5f,0.5f,0.5f),
                                               glm::vec3(-0.2f,-0.1f,-0.3f)));
 
     glm::vec3 pointLightPos = glm::vec3(0.7f,3.2f,-5.0f);
     PointLight light1(glm::vec3(0.2f,0.2f,0.2f),
                       glm::vec3(0.5f,0.5f,0.5f),
-                      glm::vec3(1.0f,1.0f,1.0f),
+                      glm::vec3(0.5f,0.5f,0.5f),
                       pointLightPos);
 
     renderer.addPointLight(&light1);
