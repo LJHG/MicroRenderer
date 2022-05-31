@@ -22,7 +22,7 @@ namespace MicroRenderer{
             ka = glm::vec3(0.2f,0.2f,0.2f);
             kd= glm::vec3(1.0f,0.5f,0.5f);
             ks = glm::vec3(0.2f,0.2f,0.2f);
-            shininess = 32.0f;
+            shininess = 16.0f;
         }
         Material(glm::vec3 _ka, glm::vec3 _kd, glm::vec3 _ks, float _shininess){
             ka = _ka;
@@ -72,6 +72,7 @@ namespace MicroRenderer{
 
         /** quick create mesh functions **/
         void asTriangle(VertexData v1, VertexData v2, VertexData v3); // read 3 vertices and as a triangle
+        void asCube(glm::vec3 center, float size, Material _material); // use fot generate point light
 
 
     private:
