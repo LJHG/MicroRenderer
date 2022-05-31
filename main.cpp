@@ -16,33 +16,7 @@ int main() {
     MicroRenderer::WindowApp app(WIDTH,HEIGHT,"first window");
 
     // mesh initialize
-    /*
-    // 画两个三角形
-    MicroRenderer::VertexData v1,v2,v3,v4,v5,v6;
-    //triangle 1 绿色在前
-    v1.position = glm::vec3(0,1,1); v1.color=glm::vec4 (255,128,0,0);
-    v2.position = glm::vec3(1,0,1); v2.color=glm::vec4 (0,128,0,0);
-    v3.position = glm::vec3(-1,-1,1); v3.color=glm::vec4 (0,128,0,0);
-    //triangle 2
-    v4.position = glm::vec3(-1,1,2); v4.color=glm::vec4 (0,0,128,0);
-    v5.position = glm::vec3(0,-1,2); v5.color=glm::vec4 (0,0,128,0);
-    v6.position = glm::vec3(1,-1,2); v6.color=glm::vec4 (0,200,128,0);
-
-    MicroRenderer::Mesh mesh1,mesh2;
-    mesh1.asTriangle(v1,v2,v3);
-    mesh2.asTriangle(v4,v5,v6);
-
-    std::vector<MicroRenderer::Mesh> meshes{mesh1,mesh2};
-     */
-
-    std::vector<MicroRenderer::Mesh> meshes = MicroRenderer::CommonUtils::loadObjModel("../assets/monkey_head/monkey_head.obj");
-    MicroRenderer::Material material = meshes[0].getMaterial();
-    std::cout<<"ka"<<std::endl;
-    MicroRenderer::LogUtils::log(material.ka);
-    std::cout<<"kd"<<std::endl;
-    MicroRenderer::LogUtils::log(material.kd);
-    std::cout<<"ks"<<std::endl;
-    MicroRenderer::LogUtils::log(material.ks);
+    std::vector<MicroRenderer::Mesh> meshes = MicroRenderer::CommonUtils::loadObjModel("../assets/scene1/scene1.obj");
 
     //camera initialize
     MicroRenderer::Camera camera(static_cast<float>(WIDTH),static_cast<float>(HEIGHT));
@@ -50,10 +24,25 @@ int main() {
     //renderer initialize
     MicroRenderer::Renderer renderer(WIDTH,HEIGHT);
     renderer.initShadingPipeline(GOURAUD_SHADER);
-    renderer.addDirectionLight(DirectionLight(glm::vec3(0.2f,0.2f,0.2f),
+    renderer.addDirectionLight(new DirectionLight(glm::vec3(0.2f,0.2f,0.2f),
                                               glm::vec3(0.5f,0.5f,0.5f),
                                               glm::vec3(1.0f,1.0f,1.0f),
                                               glm::vec3(-0.2f,-0.1f,-0.3f)));
+
+    glm::vec3 pointLightPos = glm::vec3(0.7f,3.2f,-5.0f);
+    PointLight light1(glm::vec3(0.2f,0.2f,0.2f),
+                      glm::vec3(0.5f,0.5f,0.5f),
+                      glm::vec3(1.0f,1.0f,1.0f),
+                      pointLightPos);
+
+    renderer.addPointLight(&light1);
+    // draw the point light
+    MicroRenderer::Mesh pointLight1;
+    pointLight1.asCube(pointLightPos,0.2f, MicroRenderer::Material(glm::vec3(0.1f,0.1f,0.1f),
+                                                                                    glm::vec3(1000.0f,1000.0f,1000.0f),
+                                                                                    glm::vec3(0.1f,0.1f,0.1f),
+                                                                                    32.0f));
+    meshes.push_back(pointLight1);
 
     auto start = chrono::system_clock::now();
     while(!app.shouldWindowClose()){
@@ -61,6 +50,12 @@ int main() {
         auto end = chrono::system_clock::now();
         std::chrono::duration<double> elapsed_seconds = end-start;
         //std::cout<<elapsed_seconds.count()<<std::endl;
+        light1.setLightPos(pointLightPos + glm::vec3(3*sin(elapsed_seconds.count()),3*cos(elapsed_seconds.count()),3*sin(elapsed_seconds.count())));
+        MicroRenderer::Mesh& pointLightMesh = meshes.back();
+        pointLightMesh.asCube(pointLightPos + glm::vec3(3*sin(elapsed_seconds.count()),3*cos(elapsed_seconds.count()),3*sin(elapsed_seconds.count())),0.2f, MicroRenderer::Material(glm::vec3(0.1f,0.1f,0.1f),
+                                                                          glm::vec3(1000.0f,1000.0f,1000.0f),
+                                                                          glm::vec3(0.1f,0.1f,0.1f),
+                                                                          32.0f));
         app.processEvent(camera);
 
         //render
@@ -69,17 +64,6 @@ int main() {
         uint8_t* pixels = renderer.getPixelBuffer();
         app.updateCanvas(pixels,WIDTH,HEIGHT, 3);
 
-//        MicroRenderer::Image image = MicroRenderer::CommonUtils::loadImage("../assets/1.png");
-//        uint8_t pixels[WIDTH*HEIGHT*3];
-//        for(int i=0;i<HEIGHT;i++){
-//            for(int j=0;j<WIDTH;j++){
-//                int index = (i*WIDTH+j)*3;
-//                pixels[index+0] = 128;
-//                pixels[index+1] = 128;
-//                pixels[index+2] = 128;
-//            }
-//        }
-//        app.updateCanvas(pixels,WIDTH,HEIGHT, 3);
     }
 
     return 0;
