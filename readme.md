@@ -16,6 +16,7 @@ A self-built soft Rasterizer, called Micro(soft)Renderer.
 3. glm
 4. assimp
 
+> currently only test on macos, building on linux/windows requires extra dynamic libraries for sdl2.
 ## how to run
 ```bash
 # clone the repo
