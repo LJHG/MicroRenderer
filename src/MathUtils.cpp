@@ -151,7 +151,7 @@ namespace MicroRenderer{
     }
 
     VertexOutData MathUtils::barycentricLerp(int x, int y, VertexOutData v1, VertexOutData v2, VertexOutData v3) {
-        auto[alpha, beta, gamma] = computeBarycentric2D(static_cast<float>(x), static_cast<float>(y),
+        auto[alpha, beta, gamma] = computeBarycentric2D(static_cast<float>(x+0.5f), static_cast<float>(y+0.5f), // need to add 0.5f to get the center coordinate of the pixel
                                                         v1.position[0],v1.position[1],
                                                         v2.position[0],v2.position[1],
                                                         v3.position[0],v3.position[1]);
@@ -161,8 +161,7 @@ namespace MicroRenderer{
         // TODO:关于三维空间的插值是否可以这样做的问题。。。。 目前先使用直接插值的方法
         vResult.worldPos = v1.worldPos * alpha  + v2.worldPos * beta +  v3.worldPos*gamma;
         vResult.normal = v1.normal * alpha  + v2.normal * beta + v3.normal*gamma;
-        vResult.textureCoord = v1.textureCoord * alpha  + v2.textureCoord * beta + v3.textureCoord*gamma;
-
+        vResult.textureCoord = v1.textureCoord * alpha  + v2.textureCoord * beta + v3.textureCoord * gamma;
         return vResult;
     }
 
