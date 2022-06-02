@@ -8,7 +8,6 @@ add_executable(01_Triangle
         ../../include/WindowApp.h
         ../../src/CommonUtils.cpp
         ../../include/CommonUtils.h
-        ../../external/include/stb_image.h
         ../../include/Renderer.h
         ../../src/Renderer.cpp
         ../../src/MathUtils.cpp
@@ -19,6 +18,8 @@ add_executable(01_Triangle
         ../../include/ShadingPipeline.h
         ../../src/Shader.cpp
         ../../include/Shader.h
+        ../../src/Camera.cpp
+        ../../include/Camera.h
         )
 
-target_link_libraries(01_Triangle SDL2)
+target_link_libraries(01_Triangle SDL2 assimp::assimp)

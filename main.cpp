@@ -1,7 +1,6 @@
 #include <iostream>
 #include "WindowApp.h"
 #include "CommonUtils.h"
-#include "MathUtils.h"
 #include "Renderer.h"
 #include "ShadingPipeline.h"
 #include "stb_image.h"
