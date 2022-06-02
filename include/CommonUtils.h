@@ -91,7 +91,7 @@ namespace MicroRenderer{
                     vertexData.normal = glm::normalize(vvv); // 法线记得要归一化
 
                     // 纹理坐标: 如果存在则加入。assimp 默认可以有多个纹理坐标 我们取第一个（0）即可
-                    glm::vec2 vv(0, 0);
+                    glm::vec2 vv(0.0f, 0.0f);
                     if (aiMesh->mTextureCoords[0])
                     {
                         vv.x = aiMesh->mTextureCoords[0][j].x;
