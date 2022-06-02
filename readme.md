@@ -10,12 +10,34 @@ A self-built soft Rasterizer, called Micro(soft)Renderer.
 - [x] load model
 - [x] Gouraud shading phong shading
 
-
 ## dependencies
 1. SDL2
 2. stb_image
 3. glm
 4. assimp
+
+## how to run
+```bash
+# clone the repo
+git clone https://github.com/LJHG/MicroRenderer
+# make
+cd MicroRenderer
+mkdir build
+cd build
+cmake ..
+make
+### run ###
+# run main.cpp
+./MicroRenderer
+# run example1
+./examples/01_Triangle/01_Triangle
+# run example2
+./examples/02_mvpTriangle/02_mvpTriangle
+# run example3 (need to cd into the folder to run example3, for the relative path setting for the model)
+cd examples/03_mary
+./03_mary
+
+```
 
 ## current stage showcase
 <img alt="line rasterization" height="480" src="./images/phong_shading.gif" width="640"/>
