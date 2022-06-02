@@ -103,7 +103,7 @@ namespace MicroRenderer{
         glm::vec3 kd = material.kd;
         if(textureUrl != "none"){
             int xIdx = v.textureCoord[0] * texture.width;
-            int yIdx = (1-v.textureCoord[1]) * texture.height;
+            int yIdx = v.textureCoord[1] * texture.height;
             int idx = (yIdx * texture.width + xIdx)*3;
             kd = glm::vec3(texture.pixels[idx+0]/255.0f,
                            texture.pixels[idx+1]/255.0f,
@@ -181,7 +181,7 @@ namespace MicroRenderer{
         glm::vec3 kd = material.kd;
         if(textureUrl != "none"){
             int xIdx = v.textureCoord[0] * texture.width;
-            int yIdx = (1-v.textureCoord[1]) * texture.height;
+            int yIdx = v.textureCoord[1] * texture.height;
             int idx = (yIdx * texture.width + xIdx)*3;
             kd = glm::vec3(texture.pixels[idx+0]/255.0f,
                            texture.pixels[idx+1]/255.0f,
