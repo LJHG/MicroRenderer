@@ -46,3 +46,4 @@ target_link_libraries(test SDL2 assimp::assimp)
 
 add_subdirectory(./examples/01_Triangle)
 add_subdirectory(./examples/02_mvpTriangle)
+add_subdirectory(./examples/03_mary)
