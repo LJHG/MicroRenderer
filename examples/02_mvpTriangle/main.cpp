@@ -43,7 +43,7 @@ int main() {
         //处理事件
         auto end = chrono::system_clock::now();
         std::chrono::duration<double> elapsed_seconds = end-start;
-        //std::cout<<elapsed_seconds.count()<<std::endl;
+//        std::cout<<elapsed_seconds.count()<<std::endl;
         app.processEvent(camera);
 
         //set view and projection matrix according to the state of camera
@@ -54,28 +54,16 @@ int main() {
                                                                                               camera.aspectRatio,
                                                                                               camera.zNear,
                                                                                               camera.zFar));
-
         glm::mat4 model(1.0f);
-        //model = MicroRenderer::MathUtils::rotationByX(model,sin(elapsed_seconds.count())*180);
+        model = MicroRenderer::MathUtils::rotationByX(model,sin(elapsed_seconds.count())*180);
 
         //render
         mesh1.setModelMatrix(model);
         renderer.setMeshes(std::vector<MicroRenderer::Mesh>{mesh1,mesh2});
-        renderer.render();
+        renderer.render(camera);
         uint8_t* pixels = renderer.getPixelBuffer();
         app.updateCanvas(pixels,WIDTH,HEIGHT, 3);
 
-//        MicroRenderer::Image image = MicroRenderer::CommonUtils::loadImage("../assets/1.png");
-//        uint8_t pixels[WIDTH*HEIGHT*3];
-//        for(int i=0;i<HEIGHT;i++){
-//            for(int j=0;j<WIDTH;j++){
-//                int index = (i*WIDTH+j)*3;
-//                pixels[index+0] = 128;
-//                pixels[index+1] = 128;
-//                pixels[index+2] = 128;
-//            }
-//        }
-//        app.updateCanvas(pixels,WIDTH,HEIGHT, 3);
     }
 
     return 0;

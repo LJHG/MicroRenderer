@@ -19,6 +19,8 @@ add_executable(02_mvpTriangle
         ../../include/Shader.h
         ../../src/Camera.cpp
         ../../include/Camera.h
+        ../../src/CommonUtils.cpp
+        ../../include/CommonUtils.h
         )
 
-target_link_libraries(02_mvpTriangle SDL2)
+target_link_libraries(02_mvpTriangle SDL2 assimp::assimp)
