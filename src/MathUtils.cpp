@@ -162,6 +162,13 @@ namespace MicroRenderer{
         vResult.worldPos = v1.worldPos * alpha  + v2.worldPos * beta +  v3.worldPos*gamma;
         vResult.normal = v1.normal * alpha  + v2.normal * beta + v3.normal*gamma;
         vResult.textureCoord = v1.textureCoord * alpha  + v2.textureCoord * beta + v3.textureCoord * gamma;
+        // 把position的z分量做一个透视矫正
+        float wReciprocal = 1.0f/(alpha/v1.position[3] + beta/v2.position[3] + gamma/v3.position[3]);
+        float zInterpolated = alpha * v1.position[2] / v1.position[3] +
+                            beta * v2.position[2] / v2.position[3] +
+                            gamma * v3.position[2] / v3.position[3];
+        vResult.position[2] = zInterpolated * wReciprocal;
+
         return vResult;
     }
 
