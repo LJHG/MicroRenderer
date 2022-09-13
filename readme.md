@@ -1,6 +1,8 @@
 # MicroRenderer
 
 A self-built soft Rasterizer, called Micro(soft)Renderer.
+> Curently develop in imgui, the old sdl2 version is archived in the sdl2 branch.
+
 
 ## feature
 - [x] Triangle Rasterization(line mode and fill mode)
