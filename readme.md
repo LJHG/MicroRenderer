@@ -1,6 +1,6 @@
 # MicroRenderer
 
-A self-built soft Rasterizer, called Micro(soft)Renderer.
+✨ A self-built soft Rasterizer, called Micro(soft)Renderer. ✨
 
 ## feature
 - [x] Triangle Rasterization(line mode and fill mode)
