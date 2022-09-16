@@ -135,4 +135,8 @@ namespace MicroRenderer{
 
     }
 
+    void WindowApp::setWindowTitle(std::string title) {
+        SDL_SetWindowTitle(window,title.c_str());
+    }
+
 }

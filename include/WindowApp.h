@@ -18,6 +18,7 @@ namespace MicroRenderer{
         virtual ~WindowApp();
         void updateCanvas(uint8_t* pixels,int width, int height,int channel);
         void processEvent(Camera& camera);
+        void setWindowTitle(std::string title);
         bool shouldWindowClose();
 
     private:

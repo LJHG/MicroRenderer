@@ -12,7 +12,7 @@ using namespace  std;
 
 const int WIDTH = 640, HEIGHT = 480; // SDL窗口的宽和高
 int main() {
-    MicroRenderer::WindowApp app(WIDTH,HEIGHT,"first window");
+    MicroRenderer::WindowApp app(WIDTH,HEIGHT,"MicroRenderer");
 
     // mesh initialize
     std::vector<MicroRenderer::Mesh> meshes = MicroRenderer::CommonUtils::loadObjModel("../assets/mary/Marry.obj");
@@ -45,6 +45,7 @@ int main() {
 
     auto start = chrono::system_clock::now();
     while(!app.shouldWindowClose()){
+        auto frameStart = chrono::system_clock::now();
         //处理事件
         auto end = chrono::system_clock::now();
         std::chrono::duration<double> elapsed_seconds = end-start;
@@ -63,7 +64,11 @@ int main() {
         renderer.render(camera);
         uint8_t* pixels = renderer.getPixelBuffer();
         app.updateCanvas(pixels,WIDTH,HEIGHT, 3);
-
+        // calculate frame duration
+        auto frameEnd = chrono::system_clock::now();
+        std::chrono::duration<double> frameSeconds = frameEnd-frameStart;
+        float FPS = 1.0f/frameSeconds.count();
+        app.setWindowTitle("MicroRenderer    FPS: " + to_string(FPS).substr(0,4) + "" );
     }
 
     return 0;
